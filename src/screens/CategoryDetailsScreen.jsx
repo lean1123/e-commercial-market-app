@@ -1,8 +1,7 @@
 import { View, Text, Button } from "react-native";
 import React from "react";
 
-const DetailsScreen = ({ navigation, route }) => {
-  const { content } = route.params;
+const CategoryDetailsScreen = ({ navigation, route }) => {
   return (
     <View>
       <Button
@@ -11,9 +10,9 @@ const DetailsScreen = ({ navigation, route }) => {
           navigation.navigate("HomeScreen");
         }}
       ></Button>
-      <Text>{content}</Text>
+      <Text>Details</Text>
     </View>
   );
 };
 
-export default DetailsScreen;
+export default CategoryDetailsScreen;

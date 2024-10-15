@@ -19,31 +19,26 @@
 //   },
 // });
 
-import React from "react";
-import { Button, Text, View, StyleSheet } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
-import HomeScreen from "./src/screens/home/components/HomeScreen";
-import DetailsScreen from "./src/screens/DetailsScreen";
-import MyTabs from "./src/components/default/tabs/MyTabs";
-
-// const Root = createStackNavigator();
+import React from "react";
+import { SafeAreaView, StyleSheet } from "react-native";
+import MainTab from "./src/navigations/MainTab";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <MyTabs />
-    </NavigationContainer>
+    <SafeAreaView style={styles.screen}>
+      <NavigationContainer>
+        <MainTab />
+      </NavigationContainer>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   screen: {
-    marginTop: 40,
-    alignItems: "center",
-  },
-  title: {
-    padding: 20,
-    fontSize: 42,
+    flex: 1,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignContent: "center",
   },
 });

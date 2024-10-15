@@ -2,9 +2,10 @@ import { View, Text, Button } from "react-native";
 import React from "react";
 
 const OrtherScreen = ({ navigation, route }) => {
+  const { category } = route.params;
   return (
     <View>
-      <Text>OrtherScreen</Text>
+      <Text>{category.name}</Text>
       <Button
         title="Go Back"
         onPress={() => {
