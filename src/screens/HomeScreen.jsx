@@ -82,8 +82,6 @@ const HomeScreen = ({ navigation }) => {
           className="w-full"
         />
       </View>
-
-      
     </ScrollView>
   );
 };

@@ -6,7 +6,7 @@ const CategoryItem = ({ category }) => {
   const navigation = useNavigation();
 
   const handleOnPressCategory = () => {
-    navigation.navigate("Orther", { category });
+    navigation.navigate("CategoryDetailsScreen", { category });
   };
 
   return (
