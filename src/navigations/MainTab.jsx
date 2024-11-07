@@ -12,43 +12,139 @@ import HomeStack from "./HomeStack";
 import InboxStack from "./InboxStack";
 import MyInfoStack from "./MyInfoStack";
 import SearchStack from "./SearchStack";
+import {
+  MaterialCommunityIcons,
+  AntDesign,
+  FontAwesome6,
+} from "@expo/vector-icons";
+import { Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 function MainTab() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused }) => {
-          let icon;
-
-          if (route.name === "Home") {
-            icon = focused ? faHome : faHome;
-          } else if (route.name === "Search") {
-            icon = focused ? faSearch : faSearch;
-          } else if (route.name === "Favourites") {
-            icon = focused ? faHeart : faHeart;
-          } else if (route.name === "Inbox") {
-            icon = focused ? faMessage : faMessage;
-          } else {
-            icon = focused ? faInfo : faInfo;
-          }
-
-          return <FontAwesomeIcon icon={icon} />;
+      screenOptions={{
+        tabBarStyle: {
+          height: 80,
+          paddingBottom: 15,
+          paddingTop: 15,
         },
-        tabBarActiveTintColor: "tomato",
+        tabBarActiveTintColor: "cyan",
         tabBarInactiveTintColor: "gray",
-      })}
+        headerShown: false,
+      }}
     >
       <Tab.Screen
         name="Home"
         component={HomeStack}
-        options={{ headerShown: false }}
+        options={{
+          tabBarLabel: ({ color, focused }) => (
+            <Text
+              style={{
+                color: color,
+                fontSize: 12,
+                marginBottom: 3,
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              Home
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="home" size={size} color={color} />
+          ),
+        }}
       />
-      <Tab.Screen name="Search" component={SearchStack} />
-      <Tab.Screen name="Favourites" component={FavouriteStack} />
-      <Tab.Screen name="Inbox" component={InboxStack} />
-      <Tab.Screen name="MyInfo" component={MyInfoStack} />
+      <Tab.Screen
+        name="Search"
+        component={SearchStack}
+        options={{
+          tabBarLabel: ({ color, focused }) => (
+            <Text
+              style={{
+                color: color,
+                fontSize: 12,
+                marginBottom: 3,
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              Search
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="search1" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Favourites"
+        component={FavouriteStack}
+        options={{
+          tabBarLabel: ({ color, focused }) => (
+            <Text
+              style={{
+                color: color,
+                fontSize: 12,
+                marginBottom: 3,
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              Favourites
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="hearto" size={size} color={color} />
+          ),
+          tabBarBadge: "99+",
+        }}
+      />
+      <Tab.Screen
+        name="Inbox"
+        component={InboxStack}
+        options={{
+          tabBarLabel: ({ color, focused }) => (
+            <Text
+              style={{
+                color: color,
+                fontSize: 12,
+                marginBottom: 3,
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              Inbox
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="comment-text-outline"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="MyInfo"
+        component={MyInfoStack}
+        options={{
+          tabBarLabel: ({ color, focused }) => (
+            <Text
+              style={{
+                color: color,
+                fontSize: 12,
+                marginBottom: 3,
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              Account
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome6 name="circle-user" size={size} color={color} />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }

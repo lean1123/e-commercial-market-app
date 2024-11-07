@@ -14,6 +14,7 @@ import CategoryItem from "../components/CategoryItem";
 import ProductMainBanner from "../components/ProductBanner";
 import ProductSubBanner from "../components/ProductSubBanner";
 import ProductCardItem from "../components/ProductCardItem";
+import Header from "../components/Header";
 
 const StyledText = styled(Text);
 
@@ -34,6 +35,7 @@ var listCategory = [
 const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView className="flex-1 p-5 bg-white">
+      <Header title="Home" />
       <View className="w-full flex-row items-center justify-between mb-5">
         <View className="w-4/5 rounded-md p-2 flex-row items-center bg-slate-100">
           <FontAwesomeIcon icon={faSearch} />
