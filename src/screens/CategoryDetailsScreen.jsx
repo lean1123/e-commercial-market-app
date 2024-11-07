@@ -16,6 +16,7 @@ import {
 import SubCategoryItem from "../components/SubCategoryItem";
 import SubTitleItem from "../components/SubTitleItem";
 import ProductHorizalCardItem from "../components/ProductHorizalCardItem";
+// import ProductCarousel from "../components/ProductCarousel";
 
 const list = [
   { id: 1 },
@@ -75,6 +76,14 @@ const CategoryDetailsScreen = ({ navigation, route }) => {
           <ProductHorizalCardItem key={item.id} />
         ))}
       </View>
+      {/* 
+      <View>
+        <ProductCarousel />
+      </View> */}
+
+      <TouchableOpacity>
+        
+      </TouchableOpacity>
     </ScrollView>
   );
 };
