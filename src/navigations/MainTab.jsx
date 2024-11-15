@@ -1,23 +1,15 @@
 import {
-  faHeart,
-  faHome,
-  faInfo,
-  faMessage,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+  AntDesign,
+  FontAwesome6,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Text } from "react-native";
 import FavouriteStack from "./FavouriteStack";
 import HomeStack from "./HomeStack";
 import InboxStack from "./InboxStack";
 import MyInfoStack from "./MyInfoStack";
 import SearchStack from "./SearchStack";
-import {
-  MaterialCommunityIcons,
-  AntDesign,
-  FontAwesome6,
-} from "@expo/vector-icons";
-import { Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
