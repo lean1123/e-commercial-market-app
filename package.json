@@ -13,16 +13,23 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-native-fontawesome": "^0.3.2",
+    "@react-native-async-storage/async-storage": "^1.24.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "expo": "~51.0.28",
     "expo-status-bar": "~1.12.1",
+    "firebase": "^11.0.2",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.5",
+<<<<<<< HEAD
     "react-native-svg": "^15.2.0",
     "react-native-image-slider-banner": "^1.0.3"
+=======
+    "react-native-image-slider-banner": "^1.0.3",
+    "react-native-svg": "^15.2.0"
+>>>>>>> 1c98dbf2a0f88776094cb55c03125be50f90c310
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

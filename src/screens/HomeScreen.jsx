@@ -21,8 +21,9 @@ const StyledText = styled(Text);
 var listCategory = [
   {
     id: 1,
-    picUrl: "https://picsum.photos/200/300",
-    name: "Product 1",
+    picUrl:
+      "https://th.bing.com/th/id/R.fe521fc082526d2881fabcaf9147d651?rik=ilc%2bV%2bCKcgdfIg&pid=ImgRaw&r=0",
+    name: "Electronics",
   },
   { id: 2, picUrl: "https://picsum.photos/200/300", name: "Product 1" },
   { id: 3, picUrl: "https://picsum.photos/200/300", name: "Product 1" },
