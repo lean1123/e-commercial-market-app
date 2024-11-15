@@ -23,13 +23,8 @@
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.5",
-<<<<<<< HEAD
     "react-native-svg": "^15.2.0",
     "react-native-image-slider-banner": "^1.0.3"
-=======
-    "react-native-image-slider-banner": "^1.0.3",
-    "react-native-svg": "^15.2.0"
->>>>>>> 1c98dbf2a0f88776094cb55c03125be50f90c310
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
