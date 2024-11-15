@@ -20,15 +20,31 @@
 // });
 
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import MainTab from "./src/navigations/MainTab";
+import Login from "./src/screens/Login";
+import { auth } from "./firebaseConfig";
 
 export default function App() {
+  const [user, setUser] = React.useState(null);
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
   return (
     <SafeAreaView style={styles.screen}>
       <NavigationContainer>
-        <MainTab />
+        {user ? <MainTab /> : 
+        <Login />
+        }
+        {/* <MainTab /> */}
       </NavigationContainer>
     </SafeAreaView>
   );
