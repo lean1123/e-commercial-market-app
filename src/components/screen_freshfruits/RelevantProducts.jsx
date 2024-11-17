@@ -1,7 +1,7 @@
 import { View, Text, FlatList } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
-import ProductItem from "../screen_electronics/ProductItem";
+import ProductItem from "../screen_category_detail/ProductItem";
 
 const data = [
   {
