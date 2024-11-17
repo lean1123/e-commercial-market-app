@@ -3,8 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Checkbox, TextInput } from "react-native-paper";
+import { Checkbox, Icon, TextInput } from "react-native-paper";
 import FilterSubtitleItem from "../components/FilterSubtitleItem";
+import { AirbnbRating } from "react-native-ratings";
+import OrtherFilterSubItem from "../components/OrtherFilterSubItem";
 
 const FilterScreen = () => {
   const [value, setValue] = useState({ values: [0, 37] });
@@ -81,6 +83,32 @@ const FilterScreen = () => {
           max={37}
           step={1}
         />
+      </View>
+      <FilterSubtitleItem title={"Average review"} />
+      <View className="w-full flex flex-row justify-center items-center border-b border-gray-300 py-4">
+        <AirbnbRating showRating={false} size={20} />
+        <Text className="ml-2">& Up</Text>
+      </View>
+
+      <FilterSubtitleItem title={"Orthers"} />
+      <View className="w-full items-center mt-2">
+        <View className="w-full flex-row justify-between items-center px-2">
+          <OrtherFilterSubItem
+            title={"30-days Free return"}
+            iconName={"keyboard-return"}
+          />
+          <OrtherFilterSubItem
+            title={"Buyer Protection"}
+            iconName={"shield-sun-outline"}
+          />
+        </View>
+        <View className="w-full flex-row justify-between items-center px-2 mt-5">
+          <OrtherFilterSubItem title={"Best deal"} iconName={"label"} />
+          <OrtherFilterSubItem
+            title={"Ship to store"}
+            iconName={"map-marker-outline"}
+          />
+        </View>
       </View>
     </View>
   );

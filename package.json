@@ -13,11 +13,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-native-fontawesome": "^0.3.2",
-<<<<<<< HEAD
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
-=======
-    "@react-native-async-storage/async-storage": "^1.24.0",
->>>>>>> e06eae96cb63b6018d45ab405bd828d8397310e8
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
@@ -27,14 +23,10 @@
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.5",
-<<<<<<< HEAD
     "react-native-image-slider-banner": "^1.0.3",
     "react-native-paper": "^5.12.5",
+    "react-native-ratings": "^8.1.0",
     "react-native-svg": "^15.2.0"
-=======
-    "react-native-svg": "^15.2.0",
-    "react-native-image-slider-banner": "^1.0.3"
->>>>>>> e06eae96cb63b6018d45ab405bd828d8397310e8
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
