@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, FlatList } from "react-native";
 import React from "react";
 import Header from "../components/Header";
-import SliderBanner from "../components/screen_electronics/SliderBanner";
+import SliderBanner from "../components/screen_category_detail/SliderBanner";
 import SearchBar from "../components/SearchBar";
 import FreshFruitsItem from "../components/screen_freshfruits/FreshFruitsItem";
 import RelevantProducts from "../components/screen_freshfruits/RelevantProducts";
@@ -33,12 +33,12 @@ const data = [
   },
 ];
 
-export default function FreshFruits() {
+export default function FreshFruits({ type }) {
   return (
     <ScrollView className="flex-1 p-5 bg-white">
-      <Header title="Fresh Fruits" />
+      {/* <Header title="Fresh Fruits" /> */}
       <SearchBar />
-      <SliderBanner />
+      {type === "home" && <SliderBanner />}
       <FlatList
         data={data}
         renderItem={({ item, index }) => (

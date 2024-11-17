@@ -25,6 +25,7 @@ import { SafeAreaView, StyleSheet } from "react-native";
 import MainTab from "./src/navigations/MainTab";
 import Login from "./src/screens/Login";
 import { auth } from "./firebaseConfig";
+import AuthStack from "./src/navigations/AuthStack";
 
 export default function App() {
   const [user, setUser] = React.useState(null);
@@ -39,14 +40,14 @@ export default function App() {
     });
   }, []);
   return (
-    <SafeAreaView style={styles.screen}>
       <NavigationContainer>
+    <SafeAreaView style={styles.screen}>
         {user ? <MainTab /> : 
-        <Login />
+        <AuthStack />
         }
         {/* <MainTab /> */}
-      </NavigationContainer>
     </SafeAreaView>
+      </NavigationContainer>
   );
 }
 
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
-    alignContent: "center",
+    // justifyContent: "center",
+    // alignContent: "center",
   },
 });

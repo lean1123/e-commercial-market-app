@@ -6,18 +6,20 @@ const CategoryItem = ({ category }) => {
   const navigation = useNavigation();
 
   const handleOnPressCategory = () => {
-    navigation.navigate("CategoryDetailsScreen", { category });
+    navigation.navigate("CategoryDetail", { category });
   };
 
   return (
-    <TouchableOpacity className="pr-4" onPress={handleOnPressCategory}>
-      <View className="flex flex-col justify-center items-center">
-        <Image
-          source={{ uri: category.picUrl }}
-          className="w-20 h-20 mb-2 rounded-full"
-        />
-        <Text className="font-bold text-base">{category.name}</Text>
+    <TouchableOpacity
+      className="pr-4 justify-center items-center"
+      onPress={handleOnPressCategory}
+    >
+      <View
+        className={`flex w-20 h-20 justify-center items-center p2 rounded-full ${category?.bg}`}
+      >
+        <Image source={{ uri: category.picUrl }} className="w-16 h-16 " />
       </View>
+      <Text className="font-bold text-base">{category.name}</Text>
     </TouchableOpacity>
   );
 };
