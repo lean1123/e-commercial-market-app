@@ -7,9 +7,17 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text } from "react-native";
 import FavouriteStack from "./FavouriteStack";
 import HomeStack from "./HomeStack";
-import InboxStack from "./InboxStack";
+import InboxStack from "./NotificationStack";
 import MyInfoStack from "./MyInfoStack";
 import SearchStack from "./SearchStack";
+import {
+  MaterialCommunityIcons,
+  AntDesign,
+  FontAwesome6,
+} from "@expo/vector-icons";
+import { Text } from "react-native";
+import NotificationStack from "./NotificationStack";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -88,12 +96,12 @@ function MainTab() {
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="hearto" size={size} color={color} />
           ),
-          tabBarBadge: "99+",
+          //tabBarBadge: "99+",
         }}
       />
       <Tab.Screen
-        name="Inbox"
-        component={InboxStack}
+        name="Notification"
+        component={NotificationStack}
         options={{
           tabBarLabel: ({ color, focused }) => (
             <Text
@@ -104,7 +112,7 @@ function MainTab() {
                 fontWeight: focused ? "bold" : "normal",
               }}
             >
-              Inbox
+              Notification
             </Text>
           ),
           tabBarIcon: ({ color, size }) => (
@@ -114,6 +122,7 @@ function MainTab() {
               color={color}
             />
           ),
+          tabBarBadge: 3,
         }}
       />
       <Tab.Screen

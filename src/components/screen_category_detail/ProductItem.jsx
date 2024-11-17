@@ -1,10 +1,18 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 import { FontAwesome, AntDesign } from "react-native-vector-icons";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function ProductItem({ data }) {
+  const navigate = useNavigation();
   return (
-    <View className="flex-row justify-between border border-gray-200 rounded-lg p-2 mt-2">
+    <TouchableOpacity
+      className="flex-row justify-between border border-gray-200 rounded-lg p-2 mt-2"
+      onPress={() =>
+        navigate.navigate("productDetail", { type: "productDetail", data })
+      }
+    >
       <View className="flex-row gap-2">
         <Image src={data?.image} className="w-[70px] h-[70px]" />
         <View className="flex-col justify-around">
@@ -22,6 +30,6 @@ export default function ProductItem({ data }) {
         <AntDesign name="pluscircleo" size={24} color="#7326EB" />
         <Text style={{ fontSize: 22, fontWeight: "bold" }}>${data?.price}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
