@@ -7,17 +7,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Text } from "react-native";
 import FavouriteStack from "./FavouriteStack";
 import HomeStack from "./HomeStack";
-import InboxStack from "./NotificationStack";
 import MyInfoStack from "./MyInfoStack";
-import SearchStack from "./SearchStack";
-import {
-  MaterialCommunityIcons,
-  AntDesign,
-  FontAwesome6,
-} from "@expo/vector-icons";
-import { Text } from "react-native";
 import NotificationStack from "./NotificationStack";
-
+import SearchStack from "./SearchStack";
 
 const Tab = createBottomTabNavigator();
 

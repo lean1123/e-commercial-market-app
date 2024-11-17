@@ -1,6 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-import Header from "../components/Header";
 //import CategoryDetailsScreen from "../screens/CategoryDetailsScreen";
 
 import FilterScreen from "../screens/FilterScreen";
@@ -12,13 +11,12 @@ import CartScreen from "../screens/CartScreen";
 import Header from "../components/Header";
 import CategoryDetail from "../screens/CategoryDetail";
 
-
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="HomeScreen"
+      initialRouteName="CartScreen"
       screenOptions={
         {
           //headerShown: false,
@@ -33,7 +31,6 @@ const HomeStack = () => {
         }}
       />
 
-      <Stack.Screen name="Orther" component={OrtherScreen} />
       {/* <Stack.Screen
         name="CategoryDetailsScreen"
         //component={CategoryDetailsScreen}
