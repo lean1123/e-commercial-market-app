@@ -3,6 +3,8 @@ import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import ReviewItem from "./ReviewItem";
 import { TouchableOpacity } from "react-native";
+import { Backdrop } from "@react-native-material/core";
+import ReviewBackDrop from "./ReviewBackDrop";
 
 const reviews = [
   {
@@ -24,13 +26,14 @@ const reviews = [
 ];
 
 export default function Reviews() {
+  const [showBackdrop, setShowBackdrop] = React.useState(false);
   return (
     <View className="mb-8">
       <View className="flex-row justify-between items-center mt-8 mb-2">
         <Text className="text-xl font-bold">Reviews</Text>
         <TouchableOpacity
           className="flex-row items-center"
-          onPress={() => console.log("See all reviews")}
+          onPress={() => setShowBackdrop(!showBackdrop)}
         >
           <Text className="text-gray-500">See all</Text>
           <AntDesign name="caretright" size={14} color="gray" />
@@ -41,6 +44,12 @@ export default function Reviews() {
         data={reviews}
         renderItem={({ item }) => <ReviewItem review={item} />}
         scrollEnabled={false}
+      />
+
+      <ReviewBackDrop
+        visible={showBackdrop}
+        onClose={() => setShowBackdrop(false)}
+        reviews={reviews}
       />
     </View>
   );

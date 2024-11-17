@@ -10,13 +10,14 @@ import CheckOutStatusScreen from "../screens/CheckOutStatusScreen";
 import CartScreen from "../screens/CartScreen";
 import Header from "../components/Header";
 import CategoryDetail from "../screens/CategoryDetail";
+import ProductDetail from "../screens/ProductDetail";
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="CartScreen"
+      initialRouteName="ProductDetail"
       screenOptions={
         {
           //headerShown: false,
@@ -44,6 +45,7 @@ const HomeStack = () => {
       <Stack.Screen name="CheckOutPage" component={CheckOutPage} />
       <Stack.Screen name="CheckOutStatus" component={CheckOutStatusScreen} />
       <Stack.Screen name="CartScreen" component={CartScreen} />
+      <Stack.Screen name="ProductDetail" component={ProductDetail} />
     </Stack.Navigator>
   );
 };
