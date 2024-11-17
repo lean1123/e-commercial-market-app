@@ -1,10 +1,17 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
+import Header from "../components/Header";
+//import CategoryDetailsScreen from "../screens/CategoryDetailsScreen";
+
+import FilterScreen from "../screens/FilterScreen";
+import FreshFruitScreen from "../screens/FreshFruitScreen";
 import HomeScreen from "../screens/HomeScreen";
-import OrtherScreen from "../screens/OrtherScreen";
-import CategoryDetailsScreen from "../screens/CategoryDetailsScreen";
+import CheckOutPage from "../screens/CheckOutPage";
+import CheckOutStatusScreen from "../screens/CheckOutStatusScreen";
+import CartScreen from "../screens/CartScreen";
 import Header from "../components/Header";
 import CategoryDetail from "../screens/CategoryDetail";
+
 
 const Stack = createStackNavigator();
 
@@ -25,6 +32,7 @@ const HomeStack = () => {
           header: () => <Header title="Home" parent={true} />,
         }}
       />
+
       <Stack.Screen name="Orther" component={OrtherScreen} />
       {/* <Stack.Screen
         name="CategoryDetailsScreen"
@@ -35,6 +43,10 @@ const HomeStack = () => {
       >
         {() => <CategoryDetail />}
       </Stack.Screen> */}
+      <Stack.Screen name="FilterScreen" component={FilterScreen} />
+      <Stack.Screen name="CheckOutPage" component={CheckOutPage} />
+      <Stack.Screen name="CheckOutStatus" component={CheckOutStatusScreen} />
+      <Stack.Screen name="CartScreen" component={CartScreen} />
     </Stack.Navigator>
   );
 };
