@@ -1,13 +1,13 @@
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
 import React from "react";
+import {
+  FlatList,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
-import { Icon, TextInput } from "react-native-paper";
 
 const products = [
   {
