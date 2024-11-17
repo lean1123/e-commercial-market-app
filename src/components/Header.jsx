@@ -1,21 +1,29 @@
 import { View, Text, Image } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { auth } from "../../firebaseConfig";
 
-export default function Header({ title }) {
+export default function Header({ title, parent, notShowCart }) {
+  const navigate = useNavigation();
+  const user = auth.currentUser;
   return (
-    <View className="flex-1 flex-row justify-between items-center mb-3 mt-8">
+    <View className="flex-row h-[90px] bg-white justify-between items-center border-b-[1px] border-gray-100 pt-8 px-5 pb-2">
       <View className="flex-row items-center gap-2">
-        <AntDesign name="left" size={14} color="gray" />
+        {!parent && (
+          <TouchableOpacity onPress={() => navigate.goBack()}>
+            <AntDesign name="left" size={14} color="gray" />
+          </TouchableOpacity>
+        )}
         <Text className="text-[16px] font-bold">{title}</Text>
       </View>
-      <View className="flex-row items-center gap-2">
-        <AntDesign name="shoppingcart" size={24} color="gray" />
-        <Image
-          src="https://img.freepik.com/premium-psd/3d-render-cartoon-avatar-isolated_570939-91.jpg?w=1800"
-          className="w-10 h-10 rounded-full"
-        />
-      </View>
+      {!notShowCart && (
+        <View className="flex-row items-center gap-2">
+          <AntDesign name="shoppingcart" size={24} color="gray" />
+          <Image src={user?.photoURL} className="w-10 h-10 rounded-full" />
+        </View>
+      )}
     </View>
   );
 }
