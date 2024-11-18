@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../configurations/firebaseConfig";
 
 const avatar =
   "https://img.freepik.com/premium-psd/3d-render-cartoon-avatar-isolated_570939-91.jpg?w=1800";

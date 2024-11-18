@@ -3,7 +3,7 @@ import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../configurations/firebaseConfig";
 
 export default function Header({ title, parent, notShowCart }) {
   const navigate = useNavigation();

@@ -24,8 +24,8 @@ import React, { useEffect } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import MainTab from "./src/navigations/MainTab";
 import Login from "./src/screens/Login";
-import { auth } from "./firebaseConfig";
 import AuthStack from "./src/navigations/AuthStack";
+import { auth } from "./src/configurations/firebaseConfig";
 
 export default function App() {
   const [user, setUser] = React.useState(null);
@@ -40,14 +40,12 @@ export default function App() {
     });
   }, []);
   return (
-      <NavigationContainer>
-    <SafeAreaView style={styles.screen}>
-        {user ? <MainTab /> : 
-        <AuthStack />
-        }
+    <NavigationContainer>
+      <SafeAreaView style={styles.screen}>
+        {user ? <MainTab /> : <AuthStack />}
         {/* <MainTab /> */}
-    </SafeAreaView>
-      </NavigationContainer>
+      </SafeAreaView>
+    </NavigationContainer>
   );
 }
 

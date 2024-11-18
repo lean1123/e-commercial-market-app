@@ -1,24 +1,35 @@
+import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
 import {
-  View,
+  SafeAreaView,
   Text,
   TextInput,
-  Touchable,
-  Button,
-  SafeAreaView,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import React, { useState } from "react";
-import { auth } from "../../firebaseConfig";
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { auth } from "../configurations/firebaseConfig";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      if (!response.user) {
+        console.error("Login failed");
+        return;
+      }
+
+      console.log(response.user.displayName);
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+  };
 
   const navigation = useNavigation();
   return (
@@ -44,20 +55,7 @@ export default function Login() {
 
       <TouchableOpacity
         className="bg-blue-400 p-2 rounded-lg mt-3 w-full items-center justify-center"
-        onPress={async () => {
-          setLoading(true);
-          try {
-            const response = await signInWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
-            console.log(response);
-          } catch (error) {
-            console.log(error);
-          }
-          setLoading(false);
-        }}
+        onPress={handleLogin}
         disabled={loading}
       >
         <Text className="text-white text-lg font-bold">Login</Text>
