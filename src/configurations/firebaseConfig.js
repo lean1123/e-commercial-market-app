@@ -1,6 +1,5 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { initializeAuth, getReactNativePersistence } from "firebase/auth";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -11,13 +10,13 @@ import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyDZebrjTkLfs4-Gg35njS5enhmg2alfoEE",
-  authDomain: "e-commercial-market-app.firebaseapp.com",
-  projectId: "e-commercial-market-app",
-  storageBucket: "e-commercial-market-app.firebasestorage.app",
-  messagingSenderId: "1089679501795",
-  appId: "1:1089679501795:web:df84385b15638c137358d6",
-  measurementId: "G-NFM15EWLSN",
+  apiKey: "AIzaSyCnUdzm03o3QenvA64UdL-bYwx99CB9_NY",
+  authDomain: "community-marketplace-73654.firebaseapp.com",
+  projectId: "community-marketplace-73654",
+  storageBucket: "community-marketplace-73654.appspot.com",
+  messagingSenderId: "859158941584",
+  appId: "1:859158941584:web:33c2ed55e3b330a95aed15",
+  measurementId: "G-CFXG36GYHN",
 };
 
 // Initialize Firebase

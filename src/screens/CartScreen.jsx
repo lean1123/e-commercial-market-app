@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
+import { useNavigation } from "@react-navigation/native";
 
 const products = [
   {
@@ -31,6 +32,18 @@ const products = [
 ];
 
 const CartScreen = () => {
+  const [selectedItems, setSelectedItems] = useState([]);
+  const navigation = useNavigation();
+
+  const handleCheckboxChange = (item) => {
+    setSelectedItems((prevItems) => {
+      if (prevItems.some((i) => i.id === item.id)) {
+        return prevItems.filter((i) => i.id !== item.id);
+      } else {
+        return [...prevItems, item];
+      }
+    });
+  };
   return (
     <ScrollView
       className="flex flex-col flex-1 p-5 bg-white"
@@ -38,7 +51,9 @@ const CartScreen = () => {
     >
       <FlatList
         data={products}
-        renderItem={({ item }) => <CartItem item={item} />}
+        renderItem={({ item }) => (
+          <CartItem item={item} onCheckboxChange={handleCheckboxChange} />
+        )}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ marginTop: 40 }}
         scrollEnabled={false}
@@ -50,7 +65,12 @@ const CartScreen = () => {
         <Text className="text-lg font-bold">$9000</Text>
       </View>
 
-      <TouchableOpacity className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4">
+      <TouchableOpacity
+        className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4"
+        onPress={() => {
+          navigation.navigate("CheckOutPage", { selectedItems });
+        }}
+      >
         <Text className="text-white text-base font-semibold mr-2">Next</Text>
         <Icon source={"arrow-right"} color="white" size={18} />
       </TouchableOpacity>

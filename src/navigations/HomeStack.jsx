@@ -44,8 +44,15 @@ const HomeStack = () => {
       <Stack.Screen name="FilterScreen" component={FilterScreen} />
       <Stack.Screen name="CheckOutPage" component={CheckOutPage} />
       <Stack.Screen name="CheckOutStatus" component={CheckOutStatusScreen} />
+      <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
+        options={{
+          header: () => <Header title="Product Detail" parent={true} />,
+        }}
+      />
+
       <Stack.Screen name="CartScreen" component={CartScreen} />
-      <Stack.Screen name="ProductDetail" component={ProductDetail} />
     </Stack.Navigator>
   );
 };

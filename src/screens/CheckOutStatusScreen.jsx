@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-paper";
@@ -5,6 +6,7 @@ import { AirbnbRating } from "react-native-ratings";
 
 const CheckOutStatusScreen = () => {
   const [status, setStatus] = useState(true);
+  const navigation = useNavigation();
   return (
     <View className="flex flex-1 items-center justify-center p-5">
       <View className="items-center">
@@ -73,7 +75,12 @@ const CheckOutStatusScreen = () => {
         <Text className="mb-2">How was your experience?</Text>
         <AirbnbRating showRating={false} size={20} />
       </View>
-      <TouchableOpacity className="bg-sky-300 rounded-md w-full flex-row items-center justify-center py-3 mt-4">
+      <TouchableOpacity
+        className="bg-sky-300 rounded-md w-full flex-row items-center justify-center py-3 mt-4"
+        onPress={() => {
+          navigation.navigate("HomeScreen");
+        }}
+      >
         <Icon source={"home"} color="white" className="mr-2" size={30} />
         <Text className="text-white text-base font-semibold">Back To Home</Text>
       </TouchableOpacity>
