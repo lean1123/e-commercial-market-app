@@ -42,7 +42,7 @@ const categories = [
 
 export default function Categories() {
   const [selectedCategory, setSelectedCategory] = React.useState("Mobile");
-  const [selectedLevel, setSelectedLevel] = React.useState("Best Sales");
+  //const [selectedLevel, setSelectedLevel] = React.useState("Best Sales");
   const [isSeeAll, setIsSeeAll] = React.useState(false);
 
   const handleSeeAll = () => {
@@ -101,7 +101,7 @@ export default function Categories() {
       />
 
       {/* Levels Section */}
-      <View className="flex-row mt-4 justify-between">
+      {/* <View className="flex-row mt-4 justify-between">
         {["Best Sales", "Best Matched", "Popular"].map((level) => (
           <TouchableOpacity
             key={level}
@@ -122,7 +122,7 @@ export default function Categories() {
             </Text>
           </TouchableOpacity>
         ))}
-      </View>
+      </View> */}
     </View>
   );
 }

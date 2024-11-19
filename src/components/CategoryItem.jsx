@@ -6,7 +6,7 @@ const CategoryItem = ({ category }) => {
   const navigation = useNavigation();
 
   const handleOnPressCategory = () => {
-    navigation.navigate("CategoryDetail", { category });
+    navigation.navigate("CategoryDetail");
   };
 
   return (
