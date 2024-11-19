@@ -3,7 +3,7 @@ import React from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../configurations/firebaseConfig";
 
 export default function Header({ title, parent, notShowCart }) {
   const navigate = useNavigation();
@@ -20,7 +20,13 @@ export default function Header({ title, parent, notShowCart }) {
       </View>
       {!notShowCart && (
         <View className="flex-row items-center gap-2">
-          <AntDesign name="shoppingcart" size={24} color="gray" />
+          <TouchableOpacity
+            onPress={() => {
+              navigate.navigate("CartScreen");
+            }}
+          >
+            <AntDesign name="shoppingcart" size={24} color="gray" />
+          </TouchableOpacity>
           <Image src={user?.photoURL} className="w-10 h-10 rounded-full" />
         </View>
       )}
