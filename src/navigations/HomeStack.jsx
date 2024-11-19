@@ -17,7 +17,7 @@ const Stack = createStackNavigator();
 const HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="ProductDetail"
+      initialRouteName="HomeScreen"
       screenOptions={
         {
           //headerShown: false,
@@ -46,6 +46,15 @@ const HomeStack = () => {
       <Stack.Screen name="CheckOutStatus" component={CheckOutStatusScreen} />
       <Stack.Screen name="CartScreen" component={CartScreen} />
       <Stack.Screen name="ProductDetail" component={ProductDetail} />
+
+      <Stack.Screen
+        name="CategoryDetail"
+        options={{
+          header: () => <Header title="Electronics" />,
+        }}
+      >
+        {() => <CategoryDetail />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

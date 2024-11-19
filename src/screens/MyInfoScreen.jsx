@@ -39,6 +39,12 @@ const features = [
     icon: "https://static.vecteezy.com/system/resources/previews/009/784/908/large_2x/modern-design-icon-of-web-account-vector.jpg",
     path: "MyAccountScreen",
   },
+  {
+    id: 5,
+    title: "Add product",
+    icon: "https://www.pngall.com/wp-content/uploads/10/Plus-Symbol-PNG-Image.png",
+    path: "AddProductScreen",
+  },
 ];
 
 const MyInfoScreen = () => {
