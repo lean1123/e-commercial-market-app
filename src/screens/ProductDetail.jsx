@@ -124,12 +124,10 @@ export default function ProductDetail({ type, data }) {
       <Reviews />
       {/* button */}
       <View className="flex-1 flex-row justify-start mb-10 gap-4">
-        <TouchableOpacity className="bg-white rounded-md p-3 border border-cyan-500">
+        <TouchableOpacity className="flex-row flex-1 justify-center items-center gap-1 bg-white rounded-md p-3 border border-cyan-500">
           <MaterialIcons name="add-shopping-cart" size={24} color="cyan" />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-1 bg-cyan-500 rounded-md p-3">
-          <Text className="text-center text-lg font-bold text-white">
-            Buy now
+          <Text className="text-cyan-500 text-base font-semibold">
+            ADD TO CART
           </Text>
         </TouchableOpacity>
       </View>
