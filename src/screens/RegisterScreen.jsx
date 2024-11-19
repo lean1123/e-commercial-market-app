@@ -2,7 +2,8 @@ import { View, Text, Button, TextInput } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../configurations/firebaseConfig";
+import { auth, db } from "../configurations/firebaseConfig";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
@@ -54,19 +55,36 @@ export default function RegisterScreen() {
                   password
                 );
 
-                //const { uid } = userCredential.user;
+                const { uid } = userCredential.user;
+
+                console.log("User registered: ", uid);
 
                 await updateProfile(auth.currentUser, {
                   displayName: username,
                   photoURL:
                     "https://s33929.pcdn.co/wp-content/uploads/sites/375/2021/06/New-Project-3.png",
                 });
-                //navigation.navigate("Home", { uid });
+
+                const cartRef = doc(db, "carts", uid);
+
+                const docSnap = await getDoc(cartRef);
+
+                if (!docSnap.exists()) {
+                  await setDoc(cartRef, {
+                    userId: uid,
+                    cartDetails: [],
+                  });
+                  console.log("Cart created!");
+                } else {
+                  console.log("Cart already exists!");
+                }
+
+                navigation.navigate("Home", { uid });
               } catch (error) {
-                console.log(error);
-                alert("Register failed", error.message);
+                console.error("Error registering user: ", error);
+              } finally {
+                setLoading(false);
               }
-              setLoading(false);
             }}
             disabled={loading}
           />
