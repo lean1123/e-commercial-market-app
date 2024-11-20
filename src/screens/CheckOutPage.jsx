@@ -2,11 +2,84 @@ import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
 import React, { useState } from "react";
 import { Icon, RadioButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import {
+  arrayRemove,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { auth, db } from "../configurations/firebaseConfig";
 
 const CheckOutPage = ({ route }) => {
   const navigation = useNavigation();
   const { selectedItems } = route.params;
+
   const [paymentMethod, setPaymentMethod] = useState("paypal");
+
+  const handleOrderCreation = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const orderDetails = selectedItems.map((item) => ({
+          productId: item.productId,
+          qty: item.quantity,
+          orderPrice: item.price * item.quantity,
+        }));
+
+        const orderData = {
+          userId: user.uid,
+          orderDetails,
+          paymentMethod,
+          status: "Pending",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        const orderRef = doc(collection(db, "orders"));
+        await setDoc(orderRef, orderData);
+
+        // Update product quantities
+        // Update product quantities
+        for (const item of selectedItems) {
+          const productRef = doc(db, "products", item.productId);
+          const productSnap = await getDoc(productRef);
+          if (productSnap.exists()) {
+            const productData = productSnap.data();
+            const newQuantity = productData.quantityInStock - item.quantity;
+            await updateDoc(productRef, {
+              quantityInStock: newQuantity,
+            });
+          }
+        }
+
+        // Remove purchased items from the cart
+        const userId = user.uid;
+        const cartRef = doc(db, "carts", userId);
+        const cartSnap = await getDoc(cartRef);
+        if (cartSnap.exists()) {
+          const cartData = cartSnap.data();
+          const updatedCartDetails = cartData.cartDetails.filter(
+            (cartItem) =>
+              !selectedItems.some(
+                (item) => item.productId === cartItem.productId
+              )
+          );
+          await updateDoc(cartRef, {
+            cartDetails: updatedCartDetails,
+          });
+        }
+
+        console.log("Order created successfully");
+        navigation.navigate("CheckOutStatus", { status: "success" });
+      } else {
+        console.log("No user is logged in");
+      }
+    } catch (error) {
+      console.error("Error creating order: ", error);
+    }
+  };
 
   return (
     <View className="flex flex-col flex-1 justify-center items-center p-5 bg-white">
@@ -40,7 +113,7 @@ const CheckOutPage = ({ route }) => {
               </TouchableOpacity>
             </View>
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.productId.toString()}
           scrollEnabled={true}
         />
       )}
@@ -101,9 +174,7 @@ const CheckOutPage = ({ route }) => {
       {selectedItems.length > 0 && (
         <TouchableOpacity
           className="w-full items-center rounded-md bg-sky-300 py-2 mb-2"
-          onPress={() => {
-            navigation.navigate("CheckOutStatus");
-          }}
+          onPress={handleOrderCreation}
         >
           <View className="flex-row items-center justify-between">
             <Icon source={"cash-multiple"} size={30} color="white" />
