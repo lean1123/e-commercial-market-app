@@ -16,6 +16,7 @@ import { app, db } from "../../src/configurations/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
+import { app, db } from "../configurations/firebaseConfig";
 
 const subCategories = [
   {

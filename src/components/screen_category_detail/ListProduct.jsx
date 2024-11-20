@@ -4,7 +4,8 @@ import ProductItem from "./ProductItem";
 import { TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../hooks/slices/searchSlice";
-
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../configurations/firebaseConfig";
 const product = [
   {
     id: 1,
@@ -36,8 +37,9 @@ const product = [
   },
 ];
 
-export default function ListProduct() {
-  const { category, subCategory, products, loading, error } = useSelector(
+export default function ListProduct({ categoryName }) {
+  
+   const { category, subCategory, products, loading, error } = useSelector(
     (state) => state.search
   );
   const dispatch = useDispatch();
@@ -47,6 +49,32 @@ export default function ListProduct() {
     dispatch(fetchProducts({ category, subCategory }));
     setListProduct(products);
   }, [category, subCategory]);
+  
+  const [products, setProducts] = React.useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const q = query(
+          collection(db, "products"),
+          where("category", "==", "Electronics")
+        );
+        const querySnapshot = await getDocs(q);
+        const productsList = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setProducts(productsList);
+      } catch (error) {
+        console.error("Error fetching products: ", error);
+      }
+    };
+
+    fetchProducts();
+  }, [categoryName]);
+
+
   return (
     <View className="flex-1 bg-white mt-4">
       {/* <Text>ListProduct</Text> */}

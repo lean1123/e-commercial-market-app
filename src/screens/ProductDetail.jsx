@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import React from "react";
 import Header from "../components/Header";
 import SliderBanner from "../components/screen_category_detail/SliderBanner";
@@ -6,6 +6,8 @@ import { Feather } from "@expo/vector-icons";
 import Reviews from "../components/Reviews";
 import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../configurations/firebaseConfig";
 
 const image = [
   {
@@ -22,10 +24,47 @@ const image = [
   },
 ];
 
-export default function ProductDetail({ type, data }) {
+export default function ProductDetail({ type, route }) {
+  const { data } = route.params;
+
   const [quantity, setQuantity] = React.useState(1);
   const [selectedColor, setSelectedColor] = React.useState(data?.color[0]);
   const [selectedSize, setSelectedSize] = React.useState(data?.size[0]);
+
+  const addToCart = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const productRef = doc(db, "products", data.id);
+        const productSnap = await getDoc(productRef);
+        if (productSnap.exists()) {
+          const productData = productSnap.data();
+          if (quantity > productData.quantityInStock) {
+            Alert.alert("Error", "Ordered quantity exceeds available stock.");
+            return;
+          }
+
+          const cartRef = doc(db, "carts", user.uid);
+          await updateDoc(cartRef, {
+            cartDetails: arrayUnion({
+              productId: data.id,
+              quantity: quantity,
+              price: data.price,
+            }),
+          });
+          console.log("Product added to cart");
+        } else {
+          Alert.alert("Error", "Product not found.");
+        }
+      } else {
+        Alert.alert("Error", "No user is logged in.");
+      }
+    } catch (error) {
+      console.error("Error adding product to cart: ", error);
+      Alert.alert("Error", "Failed to add product to cart.");
+    }
+  };
+
   return (
     <ScrollView className="flex-1 p-5 bg-white">
       {/* <Header title="Product Detail" /> */}
@@ -48,6 +87,10 @@ export default function ProductDetail({ type, data }) {
       <View className="w-full h-[1px] bg-gray-100 my-6"></View>
       {/* Description */}
       <View>
+        <View className="w-full flex-row items-center">
+          <Text className="text-lg font-bold mr-2">Quantity in stock:</Text>
+          <Text className="text-lg text-gray-500">{data?.quantityInStock}</Text>
+        </View>
         <Text className="text-lg font-bold">Description</Text>
         <Text className="text-lg text-gray-500 mt-3">{data?.description}</Text>
       </View>
@@ -93,7 +136,7 @@ export default function ProductDetail({ type, data }) {
           </View>
         </View>
       )}
-      {/* quantity */}
+
       <View className="mt-4">
         <Text className="text-lg font-semibold">Quantity</Text>
         <View className="flex-row justify-between items-end">
@@ -120,16 +163,17 @@ export default function ProductDetail({ type, data }) {
           </View>
         </View>
       </View>
-      {/* reviews */}
+
       <Reviews />
-      {/* button */}
+
       <View className="flex-1 flex-row justify-start mb-10 gap-4">
-        <TouchableOpacity className="bg-white rounded-md p-3 border border-cyan-500">
+        <TouchableOpacity
+          className="flex-row flex-1 justify-center items-center gap-1 bg-white rounded-md p-3 border border-cyan-500"
+          onPress={addToCart}
+        >
           <MaterialIcons name="add-shopping-cart" size={24} color="cyan" />
-        </TouchableOpacity>
-        <TouchableOpacity className="flex-1 bg-cyan-500 rounded-md p-3">
-          <Text className="text-center text-lg font-bold text-white">
-            Buy now
+          <Text className="text-cyan-500 text-base font-semibold">
+            ADD TO CART
           </Text>
         </TouchableOpacity>
       </View>

@@ -48,27 +48,7 @@ function MainTab() {
           ),
         }}
       />
-      <Tab.Screen
-        name="Search"
-        component={SearchStack}
-        options={{
-          tabBarLabel: ({ color, focused }) => (
-            <Text
-              style={{
-                color: color,
-                fontSize: 12,
-                marginBottom: 3,
-                fontWeight: focused ? "bold" : "normal",
-              }}
-            >
-              Search
-            </Text>
-          ),
-          tabBarIcon: ({ color, size }) => (
-            <AntDesign name="search1" size={size} color={color} />
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="Favourites"
         component={FavouriteStack}

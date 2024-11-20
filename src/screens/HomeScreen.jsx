@@ -58,7 +58,10 @@ const HomeScreen = ({ navigation }) => {
           <FontAwesomeIcon icon={faSearch} />
           <TextInput placeholder="Search for product" className="ml-2 w-full" />
         </View>
-        <TouchableOpacity className="bg-slate-100 w-1/6 flex-row justify-center items-center p-3 rounded-md">
+        <TouchableOpacity
+          className="bg-slate-100 w-1/6 flex-row justify-center items-center p-3 rounded-md"
+          onPress={() => navigation.navigate("FilterScreen")}
+        >
           <FontAwesomeIcon icon={faFilter} size={16} />
         </TouchableOpacity>
       </View>

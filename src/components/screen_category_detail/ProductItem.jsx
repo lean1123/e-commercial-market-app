@@ -4,13 +4,13 @@ import { FontAwesome, AntDesign } from "react-native-vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-export default function ProductItem({ data }) {
+export default function ProductItem({ data = {} }) {
   const navigate = useNavigation();
   return (
     <TouchableOpacity
       className="flex-row justify-between border border-gray-200 rounded-lg p-2 mt-2"
       onPress={() =>
-        navigate.navigate("productDetail", { type: "productDetail", data })
+        navigate.navigate("ProductDetail", { type: "productDetail", data })
       }
     >
       <View className="flex-row gap-2">
