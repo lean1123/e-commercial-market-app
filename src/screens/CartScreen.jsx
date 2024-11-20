@@ -9,60 +9,142 @@ import {
 import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
 import { useNavigation } from "@react-navigation/native";
-
-const products = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: 20,
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: 30,
-    quantity: 2,
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    price: 40,
-    quantity: 3,
-  },
-];
+import { auth, db } from "../configurations/firebaseConfig";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 const CartScreen = () => {
   const [selectedItems, setSelectedItems] = useState([]);
+  const [cartDetails, setCartDetails] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchCartDetails = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const cartRef = doc(db, "carts", user.uid);
+          const cartSnap = await getDoc(cartRef);
+
+          if (cartSnap.exists()) {
+            const cartData = cartSnap.data();
+            console.log("Cart Data:", cartData);
+
+            const cartItems = cartData.cartDetails || [];
+
+            const productPromises = cartItems.map(async (item) => {
+              const productRef = doc(db, "products", item.productId);
+              const productSnap = await getDoc(productRef);
+              if (productSnap.exists()) {
+                const productData = productSnap.data();
+                return { ...item, name: productData.name };
+              }
+              return item;
+            });
+
+            const productsWithDetails = await Promise.all(productPromises);
+            setCartDetails(productsWithDetails);
+          }
+        } else {
+          console.log("No user is logged in");
+        }
+      } catch (error) {
+        console.error("Error fetching cart details:", error);
+      }
+    };
+
+    fetchCartDetails();
+  }, []);
+
+  useEffect(() => {
+    const calculateTotalPrice = () => {
+      const total = selectedItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+      );
+      setTotalPrice(total);
+    };
+
+    calculateTotalPrice();
+  }, [selectedItems]);
+
+  const updateCartQuantity = async (item, newQuantity) => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const cartRef = doc(db, "carts", user.uid);
+
+        await updateDoc(cartRef, {
+          cartDetails: arrayRemove(item),
+        });
+
+        await updateDoc(cartRef, {
+          cartDetails: arrayUnion({
+            ...item,
+            quantity: newQuantity,
+          }),
+        });
+
+        setCartDetails((prevItems) =>
+          prevItems.map((i) =>
+            i.productId === item.productId ? { ...i, quantity: newQuantity } : i
+          )
+        );
+
+        console.log("Cart updated");
+      } else {
+        console.log("No user is logged in");
+      }
+    } catch (error) {
+      console.error("Error updating cart: ", error);
+    }
+  };
+
+  const handleQuantityChange = (item, change) => {
+    const newQuantity = item.quantity + change;
+    if (newQuantity > 0) {
+      updateCartQuantity(item, newQuantity);
+    }
+  };
 
   const handleCheckboxChange = (item) => {
     setSelectedItems((prevItems) => {
-      if (prevItems.some((i) => i.id === item.id)) {
-        return prevItems.filter((i) => i.id !== item.id);
+      if (prevItems.some((i) => i.productId === item.productId)) {
+        return prevItems.filter((i) => i.productId !== item.productId);
       } else {
         return [...prevItems, item];
       }
     });
   };
+
   return (
     <ScrollView
       className="flex flex-col flex-1 p-5 bg-white"
       contentContainerStyle={{ alignItems: "center" }}
     >
       <FlatList
-        data={products}
+        data={cartDetails}
         renderItem={({ item }) => (
-          <CartItem item={item} onCheckboxChange={handleCheckboxChange} />
+          <CartItem
+            item={item}
+            onCheckboxChange={handleCheckboxChange}
+            handleQuantityChange={handleQuantityChange}
+          />
         )}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item, index) => item.productId?.toString()}
         contentContainerStyle={{ marginTop: 40 }}
         scrollEnabled={false}
-        style
       />
 
       <View className="w-full flex-row justify-between my-4">
         <Text className="text-base font-semibold">TOTAL</Text>
-        <Text className="text-lg font-bold">$9000</Text>
+        <Text className="text-lg font-bold">${totalPrice}</Text>
       </View>
 
       <TouchableOpacity
