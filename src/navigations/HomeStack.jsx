@@ -54,7 +54,7 @@ const HomeStack = () => {
 
       <Stack.Screen name="CartScreen" component={CartScreen} />
 
-      <Stack.Screen name="ProductDetail" component={ProductDetail} />
+      {/* <Stack.Screen name="ProductDetail" component={ProductDetail} /> */}
 
       <Stack.Screen
         name="CategoryDetail"

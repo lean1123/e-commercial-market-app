@@ -1,6 +1,8 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategory, setSubCategory } from "../../hooks/slices/searchSlice";
 
 const categories = [
   {
@@ -45,6 +47,18 @@ export default function Categories() {
   //const [selectedLevel, setSelectedLevel] = React.useState("Best Sales");
   const [isSeeAll, setIsSeeAll] = React.useState(false);
 
+  const dispatch = useDispatch();
+
+  const { category } = useSelector((state) => state.search);
+
+  const handleSelectCategory = (name) => {
+    setSelectedCategory(name);
+    dispatch(setSubCategory(name));
+    dispatch(setCategory("Electronics"));
+    console.log(category);
+    console.log(name);
+  };
+
   const handleSeeAll = () => {
     setIsSeeAll(!isSeeAll);
   };
@@ -71,7 +85,7 @@ export default function Categories() {
         data={categories}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => setSelectedCategory(item.name)}
+            onPress={() => handleSelectCategory(item.name)}
             className="justify-center items-center rounded-lg mr-5"
             style={{
               backgroundColor: item.bgcolor,

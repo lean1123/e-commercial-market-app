@@ -1,9 +1,11 @@
 import { View, Text, FlatList } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import ProductItem from "./ProductItem";
 import { TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../../hooks/slices/searchSlice";
 
-const products = [
+const product = [
   {
     id: 1,
     name: "Product 1",
@@ -35,18 +37,32 @@ const products = [
 ];
 
 export default function ListProduct() {
+  const { category, subCategory, products, loading, error } = useSelector(
+    (state) => state.search
+  );
+  const dispatch = useDispatch();
+  const [listProduct, setListProduct] = React.useState(products);
+
+  useEffect(() => {
+    dispatch(fetchProducts({ category, subCategory }));
+    setListProduct(products);
+  }, [category, subCategory]);
   return (
     <View className="flex-1 bg-white mt-4">
       {/* <Text>ListProduct</Text> */}
-      <FlatList
-        data={products}
-        renderItem={({ item, index }) => (
-          <ProductItem data={item} key={index} />
-        )}
-        keyExtractor={(item) => item.id.toString()}
-        //nestedScrollEnabled={true}
-        scrollEnabled={false}
-      />
+      {loading && <Text>Loading...</Text>}
+      {error && <Text>Error: {error}</Text>}
+      {!loading && !error && products.length === 0 && (
+        <Text>No products found.</Text>
+      )}
+      {!loading && !error && (
+        <FlatList
+          data={products}
+          renderItem={({ item }) => <ProductItem data={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          scrollEnabled={false}
+        />
+      )}
       <TouchableOpacity
         className="bg-gray-200 py-3 rounded-md mt-4"
         onPress={() => alert("See all")}

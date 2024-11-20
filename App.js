@@ -26,6 +26,8 @@ import MainTab from "./src/navigations/MainTab";
 import Login from "./src/screens/Login";
 import AuthStack from "./src/navigations/AuthStack";
 import { auth } from "./src/configurations/firebaseConfig";
+import { Provider } from "react-redux";
+import store from "./src/hooks/store";
 
 export default function App() {
   const [user, setUser] = React.useState(null);
@@ -41,10 +43,13 @@ export default function App() {
   }, []);
   return (
     <NavigationContainer>
+      <Provider store={store}>
+
       <SafeAreaView style={styles.screen}>
         {user ? <MainTab /> : <AuthStack />}
         {/* <MainTab /> */}
       </SafeAreaView>
+      </Provider>
     </NavigationContainer>
   );
 }
