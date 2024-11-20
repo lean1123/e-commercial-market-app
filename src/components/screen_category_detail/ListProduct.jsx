@@ -38,19 +38,17 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
-  
-   const { category, subCategory, products, loading, error } = useSelector(
-    (state) => state.search
-  );
-  const dispatch = useDispatch();
-  const [listProduct, setListProduct] = React.useState(products);
+  // const { category, subCategory, products, loading, error } = useSelector(
+  //   (state) => state.search
+  // );
+  // const dispatch = useDispatch();
+  // const [listProduct, setListProduct] = React.useState(products);
+  const [products, setProducts] = React.useState([]);
 
   useEffect(() => {
     dispatch(fetchProducts({ category, subCategory }));
     setListProduct(products);
   }, [category, subCategory]);
-  
-  const [products, setProducts] = React.useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -73,7 +71,6 @@ export default function ListProduct({ categoryName }) {
 
     fetchProducts();
   }, [categoryName]);
-
 
   return (
     <View className="flex-1 bg-white mt-4">
