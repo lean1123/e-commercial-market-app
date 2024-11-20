@@ -45,14 +45,48 @@ export default function ProductDetail({ type, route }) {
           }
 
           const cartRef = doc(db, "carts", user.uid);
-          await updateDoc(cartRef, {
-            cartDetails: arrayUnion({
-              productId: data.id,
-              quantity: quantity,
-              price: data.price,
-            }),
-          });
-          console.log("Product added to cart");
+          const cartSnap = await getDoc(cartRef);
+          if (cartSnap.exists()) {
+            const cartData = cartSnap.data();
+            const existingItem = cartData.cartDetails.find(
+              (cartItem) => cartItem.productId === data.id
+            );
+
+            if (existingItem) {
+              // Increase the quantity of the existing item
+              const newQuantity = existingItem.quantity + quantity;
+              const updatedCartDetails = cartData.cartDetails.map((cartItem) =>
+                cartItem.productId === data.id
+                  ? { ...cartItem, quantity: newQuantity }
+                  : cartItem
+              );
+
+              // Update the cart with the new item
+              await updateDoc(cartRef, {
+                cartDetails: updatedCartDetails,
+              });
+            } else {
+              // Add the new item to the cart
+              await updateDoc(cartRef, {
+                cartDetails: arrayUnion({
+                  productId: data.id,
+                  quantity: quantity,
+                  price: data.price,
+                }),
+              });
+            }
+          } else {
+            // Add the new item to the cart
+            await updateDoc(cartRef, {
+              cartDetails: arrayUnion({
+                productId: data.id,
+                quantity: quantity,
+                price: data.price,
+              }),
+            });
+          }
+
+          Alert.alert("Product added to cart");
         } else {
           Alert.alert("Error", "Product not found.");
         }
