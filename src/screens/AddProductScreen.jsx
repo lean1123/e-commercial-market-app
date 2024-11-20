@@ -12,6 +12,7 @@ import moment from "moment";
 import * as ImagePicker from "expo-image-picker";
 import Picker from "react-native-picker-select";
 import { TouchableOpacity } from "react-native";
+import { app, db } from "../../src/configurations/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
