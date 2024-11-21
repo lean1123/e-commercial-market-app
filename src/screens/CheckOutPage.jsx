@@ -1,20 +1,13 @@
-import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
-import React, { useState } from "react";
-import { Icon, RadioButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import {
-  arrayRemove,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import React, { useState } from "react";
+import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { Icon, RadioButton } from "react-native-paper";
 import { auth, db } from "../configurations/firebaseConfig";
 
 const CheckOutPage = ({ route }) => {
   const navigation = useNavigation();
-  const { selectedItems } = route.params;
+  const { selectedItems, totalPrice } = route.params;
 
   const [paymentMethod, setPaymentMethod] = useState("paypal");
 
@@ -35,9 +28,11 @@ const CheckOutPage = ({ route }) => {
           status: "Pending",
           createdAt: new Date(),
           updatedAt: new Date(),
+          totalPrice: totalPrice,
         };
 
         const orderRef = doc(collection(db, "orders"));
+
         await setDoc(orderRef, orderData);
 
         // Update product quantities
@@ -78,6 +73,7 @@ const CheckOutPage = ({ route }) => {
       }
     } catch (error) {
       console.error("Error creating order: ", error);
+      navigation.navigate("CheckOutStatus", { status: "failed" });
     }
   };
 

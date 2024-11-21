@@ -38,39 +38,40 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
-  // const { category, subCategory, products, loading, error } = useSelector(
-  //   (state) => state.search
-  // );
-  // const dispatch = useDispatch();
-  // const [listProduct, setListProduct] = React.useState(products);
-  const [products, setProducts] = React.useState([]);
+  const { category, subCategory, products, loading, error } = useSelector(
+    (state) => state.search
+  );
+  const dispatch = useDispatch();
+  const [listProduct, setListProduct] = React.useState(products);
 
   useEffect(() => {
     dispatch(fetchProducts({ category, subCategory }));
     setListProduct(products);
   }, [category, subCategory]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const q = query(
-          collection(db, "products"),
-          where("category", "==", "Electronics")
-        );
-        const querySnapshot = await getDocs(q);
-        const productsList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+  // const [products, setProducts] = React.useState([]);
 
-        setProducts(productsList);
-      } catch (error) {
-        console.error("Error fetching products: ", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const q = query(
+  //         collection(db, "products"),
+  //         where("category", "==", "Electronics")
+  //       );
+  //       const querySnapshot = await getDocs(q);
+  //       const productsList = querySnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
 
-    fetchProducts();
-  }, [categoryName]);
+  //       setProducts(productsList);
+  //     } catch (error) {
+  //       console.error("Error fetching products: ", error);
+  //     }
+  //   };
+
+  //   fetchProducts();
+  // }, [categoryName]);
 
   return (
     <View className="flex-1 bg-white mt-4">
@@ -82,7 +83,7 @@ export default function ListProduct({ categoryName }) {
       )}
       {!loading && !error && (
         <FlatList
-          data={products}
+          data={listProduct}
           renderItem={({ item }) => <ProductItem data={item} />}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
