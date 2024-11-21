@@ -2,16 +2,15 @@ import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 //import CategoryDetailsScreen from "../screens/CategoryDetailsScreen";
 
-import FilterScreen from "../screens/FilterScreen";
-import FreshFruitScreen from "../screens/FreshFruitScreen";
-import HomeScreen from "../screens/HomeScreen";
+import { useSelector } from "react-redux";
+import Header from "../components/Header";
+import CartScreen from "../screens/CartScreen";
+import CategoryDetail from "../screens/CategoryDetail";
 import CheckOutPage from "../screens/CheckOutPage";
 import CheckOutStatusScreen from "../screens/CheckOutStatusScreen";
-import CartScreen from "../screens/CartScreen";
-import Header from "../components/Header";
-import CategoryDetail from "../screens/CategoryDetail";
+import FilterScreen from "../screens/FilterScreen";
+import HomeScreen from "../screens/HomeScreen";
 import ProductDetail from "../screens/ProductDetail";
-import { useSelector } from "react-redux";
 
 const Stack = createStackNavigator();
 

@@ -2,6 +2,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../configurations/firebaseConfig";
+import { AirbnbRating } from "react-native-ratings";
 
 export default function ReviewItem({ review }) {
   const [userName, setUserName] = useState("");
@@ -44,6 +45,16 @@ export default function ReviewItem({ review }) {
           </Text>
         </View>
         <Text style={styles.contentText}>{review?.content}</Text>
+        <View style={styles.imageContainer}>
+          <AirbnbRating
+            count={5}
+            defaultRating={review.rating}
+            size={20}
+            showRating={false}
+            isDisabled={true}
+          />
+        </View>
+
         <View style={styles.imageContainer}>
           {review.listImageUrl?.map((item, index) => (
             <Image

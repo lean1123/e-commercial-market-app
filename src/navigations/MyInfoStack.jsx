@@ -5,6 +5,8 @@ import MyInfoScreen from "../screens/MyInfoScreen";
 import Header from "../components/Header";
 import MyOrderScreen from "../screens/MyOrderScreen";
 import AddProductScreen from "../screens/AddProductScreen";
+import MyReviewScreen from "../screens/MyReviewScreen";
+import MyAccountScreen from "../screens/MyAccountScreen";
 
 const Stack = createStackNavigator();
 
@@ -35,6 +37,24 @@ const MyInfoStack = () => {
         options={{
           header: () => (
             <Header title="Add new product" parent={false} notShowCart={true} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="MyReviews"
+        component={MyReviewScreen}
+        options={{
+          header: () => (
+            <Header title="My Reviews" parent={false} notShowCart={true} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="MyAccountScreen"
+        component={MyAccountScreen}
+        options={{
+          header: () => (
+            <Header title="My Profile" parent={false} notShowCart={true} />
           ),
         }}
       />

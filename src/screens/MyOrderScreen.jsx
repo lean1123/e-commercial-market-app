@@ -108,6 +108,8 @@ const MyOrderScreen = () => {
   return (
     <ScrollView
       className="flex-1 p-5 bg-white"
+      nestedScrollEnabled={true}
+      contentContainerStyle={{ padding: 5 }}
       // contentContainerStyle={{ alignItems: "center" }}
     >
       {/* <Text className="text-2xl font-bold mb-4">My Orders</Text> */}
@@ -118,7 +120,6 @@ const MyOrderScreen = () => {
 
         keyExtractor={(item) => item.id.toString()}
         scrollEnabled={false}
-        style
       />
 
       <TouchableOpacity

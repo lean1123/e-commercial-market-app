@@ -21,12 +21,12 @@ const features = [
     icon: "https://th.bing.com/th/id/R.c0ff976d070a16dcf6c1669616c62ac5?rik=bP1gP3toKBm1yw&pid=ImgRaw&r=0",
     path: "MyOrderScreen",
   },
-  {
-    id: 2,
-    title: "My Wishlist",
-    icon: "https://cdn-icons-png.flaticon.com/512/2749/2749667.png",
-    path: "MyWishlistScreen",
-  },
+  // {
+  //   id: 2,
+  //   title: "My Wishlist",
+  //   icon: "https://cdn-icons-png.flaticon.com/512/2749/2749667.png",
+  //   path: "MyWishlistScreen",
+  // },
   {
     id: 3,
     title: "My Reviews",

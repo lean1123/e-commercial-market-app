@@ -1,14 +1,13 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Checkbox, Icon, TextInput } from "react-native-paper";
-import FilterSubtitleItem from "../components/FilterSubtitleItem";
+import { TextInput } from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
-import OrtherFilterSubItem from "../components/OrtherFilterSubItem";
-import { useNavigation } from "@react-navigation/native";
 import { useDispatch } from "react-redux";
+import FilterSubtitleItem from "../components/FilterSubtitleItem";
 import { setRangePrice, setRating } from "../hooks/slices/searchSlice";
 
 const FilterScreen = () => {
