@@ -57,8 +57,9 @@ const NotificationScreen = () => {
         const notificationsRef = collection(db, "notifications"); // Tham chiếu tới collection
         const q = query(
           notificationsRef,
-          where("userId", "==", user.uid)
-          // orderBy("read", "desc")
+          where("userId", "==", user.uid),
+          orderBy("read", "asc"),
+          orderBy("createdAt", "asc")
         ); // Tạo query theo userId
 
         const querySnapshot = await getDocs(q); // Lấy dữ liệu từ Firestore

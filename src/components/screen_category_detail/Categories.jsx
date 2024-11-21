@@ -96,34 +96,31 @@ const FreshFruitCategories = [
 ];
 
 export default function Categories() {
-  const [selectedCategory, setSelectedCategory] = React.useState("Mobile");
-  //const [selectedLevel, setSelectedLevel] = React.useState("Best Sales");
   const [isSeeAll, setIsSeeAll] = React.useState(false);
 
   const dispatch = useDispatch();
-  const { category } = useSelector((state) => state.search);
+  const { category, subCategory } = useSelector((state) => state.search);
 
   useEffect(() => {
     switch (category) {
       case "Electronics":
-        setSelectedCategory("Mobile");
+        dispatch(setSubCategory("Mobile"));
         break;
       case "Fashion":
-        setSelectedCategory("Clothes");
+        dispatch(setSubCategory("Clothes"));
         break;
       case "Beauty":
-        setSelectedCategory("Makeup");
+        dispatch(setSubCategory("Makeup"));
         break;
       case "Fresh Fruit":
-        setSelectedCategory("Vegetables");
+        dispatch(setSubCategory("Vegetables"));
         break;
       default:
-        setSelectedCategory("Mobile");
+        dispatch(setSubCategory("Mobile"));
     }
   }, []);
 
   const handleSelectCategory = (name) => {
-    setSelectedCategory(name);
     dispatch(setSubCategory(name));
     console.log(category);
     console.log(name);
@@ -167,11 +164,9 @@ export default function Categories() {
             className="justify-center items-center rounded-lg mr-5"
             style={{
               backgroundColor: item.bgcolor,
-              borderWidth: item.name === selectedCategory ? 2 : 0,
+              borderWidth: item.name === subCategory ? 2 : 0,
               borderColor:
-                item.name === selectedCategory
-                  ? item.borderColor
-                  : "transparent",
+                item.name === subCategory ? item.borderColor : "transparent",
               margin: isSeeAll ? 10 : 0,
               width: isSeeAll ? "45%" : 110,
               height: isSeeAll ? 120 : 110,
