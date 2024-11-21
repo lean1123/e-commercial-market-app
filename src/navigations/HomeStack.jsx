@@ -49,7 +49,13 @@ const HomeStack = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen name="CheckOutPage" component={CheckOutPage} />
-      <Stack.Screen name="CheckOutStatus" component={CheckOutStatusScreen} />
+      <Stack.Screen
+        name="CheckOutStatus"
+        component={CheckOutStatusScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Stack.Screen
         name="ProductDetail"
         component={ProductDetail}

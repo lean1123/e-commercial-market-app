@@ -4,76 +4,44 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
 
-const CheckOutStatusScreen = () => {
-  const [status, setStatus] = useState(true);
+const CheckOutStatusScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { status } = route.params;
+
   return (
     <View className="flex flex-1 items-center justify-center p-5">
       <View className="items-center">
-        {status ? (
+        {status === "success" ? (
           <Icon source={"check-circle"} size={100} color="green" />
         ) : (
           <Icon source={"close-circle"} size={100} color="red" />
         )}
-        <Text className="text-sky-400 text-xl font-semibold">
-          {status ? "Order Placed Successfully!" : "Order Failed!"}
-        </Text>
-        <Text className="px-16 py-2 text-base text-center">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-          obcaecati, hic sed fugit velit dicta sint.
-        </Text>
-      </View>
-      <View className="flex flex-col border-b border-gray-300">
-        <View className="w-full flex-row justify-between items-center p-4">
-          <Text className="text-base font-semibold text-gray-400">
-            Subtotal
+        {status === "success" ? (
+          <Text className="text-green-600 text-xl font-semibold">
+            Order Placed Successfully
           </Text>
-          <Text className="text-lg font-semibold">$ 0.00</Text>
-        </View>
-        <View className="w-full flex-row justify-between items-center p-4">
-          <Text className="text-base font-semibold text-gray-400">
-            Tax (10%)
+        ) : (
+          <Text className="text-red-600 text-xl font-semibold">
+            Order Placed Failed
           </Text>
-          <Text className="text-lg font-semibold">$ 0.00</Text>
-        </View>
-        <View className="w-full flex-row justify-between items-center p-4">
-          <Text className="text-base font-semibold text-gray-400">Fee</Text>
-          <Text className="text-lg font-semibold">$ 0.00</Text>
-        </View>
+        )}
       </View>
-      <View className="flex flex-col border-b border-gray-300">
-        <View className="w-full flex-row justify-between items-center p-4">
-          <Text className="text-base font-semibold text-gray-400">Card</Text>
-          <View className="flex-row items-center">
-            <Image
-              source={require("../../assets/master-card.webp")}
-              className="w-10 h-10"
-            />
-            <Text className="text-gray-400">**** 1234</Text>
-          </View>
-        </View>
-      </View>
+      <View className="flex flex-col border-b border-gray-300"></View>
+
       <View className="flex flex-col">
         <View className="w-full flex-row justify-between items-center p-4">
-          <Text className="text-base font-semibold text-gray-400">Total</Text>
           <View className="flex-row items-center">
-            {status ? (
+            {status === "success" ? (
               <Text className="text-base font-semibold px-2 py-1 bg-green-200 rounded-xl text-green-600">
                 Success
               </Text>
             ) : (
               <Text className="text-base font-semibold px-2 py-1 bg-red-200 rounded-xl text-red-600">
-                {" "}
                 Failed
               </Text>
             )}
-            <Text className="text-green-700 text-base ml-2">$3,040</Text>
           </View>
         </View>
-      </View>
-      <View className="w-full flex-col items-center">
-        <Text className="mb-2">How was your experience?</Text>
-        <AirbnbRating showRating={false} size={20} />
       </View>
       <TouchableOpacity
         className="bg-sky-300 rounded-md w-full flex-row items-center justify-center py-3 mt-4"

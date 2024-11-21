@@ -38,6 +38,7 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
+
   const {
     searchValue,
     rangePrice,
@@ -48,7 +49,13 @@ export default function ListProduct({ categoryName }) {
     loading,
     error,
   } = useSelector((state) => state.search);
+
+//   const { category, subCategory, products, loading, error } = useSelector(
+//     (state) => state.search
+//   );
+
   const dispatch = useDispatch();
+
 
   const [seeAll, setSeeAll] = React.useState(false);
   // const [listProduct, setListProduct] = React.useState(products);
@@ -67,6 +74,13 @@ export default function ListProduct({ categoryName }) {
   };
 
   //const [products, setProducts] = React.useState([]);
+
+//   useEffect(() => {
+//     dispatch(fetchProducts({ category, subCategory }));
+//     setListProduct(products);
+//   }, [category, subCategory]);
+
+  // const [products, setProducts] = React.useState([]);
 
   // useEffect(() => {
   //   const fetchProducts = async () => {
@@ -100,7 +114,10 @@ export default function ListProduct({ categoryName }) {
       )}
       {!loading && !error && (
         <FlatList
+
           data={seeAll ? products : products.slice(0, 4)}
+//           data={listProduct}
+
           renderItem={({ item }) => <ProductItem data={item} />}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}

@@ -1,15 +1,15 @@
-import { View, Text, Image, TouchableOpacity, FlatList } from "react-native";
-import React, { useState } from "react";
-import { Icon, RadioButton } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import React, { useState } from "react";
 import {
-  arrayRemove,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-} from "firebase/firestore";
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Icon, RadioButton } from "react-native-paper";
 import { auth, db } from "../configurations/firebaseConfig";
 import moment from "moment";
 import { useDispatch } from "react-redux";
@@ -17,8 +17,12 @@ import { fetchNumOfUnreadNotifications } from "../hooks/slices/notificationSlice
 
 const CheckOutPage = ({ route }) => {
   const navigation = useNavigation();
+
   const dispatch = useDispatch();
-  const { selectedItems } = route.params;
+//   const { selectedItems } = route.params;
+
+  const { selectedItems, totalPrice } = route.params;
+
 
   const [paymentMethod, setPaymentMethod] = useState("paypal");
 
@@ -26,6 +30,25 @@ const CheckOutPage = ({ route }) => {
     try {
       const user = auth.currentUser;
       if (user) {
+        // Check if the ordered quantity exceeds the available stock
+        for (const item of selectedItems) {
+          const productRef = doc(db, "products", item.productId);
+          const productSnap = await getDoc(productRef);
+          if (productSnap.exists()) {
+            const productData = productSnap.data();
+            if (item.quantity > productData.quantityInStock) {
+              Alert.alert(
+                "Error",
+                `Ordered quantity for ${item.name} exceeds available stock.`
+              );
+              return;
+            }
+          } else {
+            Alert.alert("Error", `Product ${item.name} not found.`);
+            return;
+          }
+        }
+
         const orderDetails = selectedItems.map((item) => ({
           productId: item.productId,
           qty: item.quantity,
@@ -39,9 +62,11 @@ const CheckOutPage = ({ route }) => {
           status: "Pending",
           createdAt: new Date(),
           updatedAt: new Date(),
+          totalPrice: totalPrice,
         };
 
         const orderRef = doc(collection(db, "orders"));
+
         await setDoc(orderRef, orderData);
 
         // Update product quantities
@@ -94,6 +119,7 @@ const CheckOutPage = ({ route }) => {
       }
     } catch (error) {
       console.error("Error creating order: ", error);
+      navigation.navigate("CheckOutStatus", { status: "failed" });
     }
   };
 
@@ -121,7 +147,10 @@ const CheckOutPage = ({ route }) => {
                   </View>
                 </View>
                 <View className="flex flex-col">
-                  <TouchableOpacity className="mb-6">
+                  <TouchableOpacity
+                    className="mb-6"
+                    onPress={() => navigation.navigate("CartScreen")}
+                  >
                     <Icon source={"pencil"} size={16} />
                   </TouchableOpacity>
                   <Text>X{item.quantity}</Text>
