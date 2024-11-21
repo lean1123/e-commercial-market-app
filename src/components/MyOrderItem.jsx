@@ -65,7 +65,9 @@ export default function MyOrderItem({ item }) {
       <Text>Payment Method: {item?.paymentMethod}</Text>
       {/* </View> */}
       <View className="flex-row justify-between items-end">
-        <Text className="text-lg font-medium text-cyan-500">Total: $100</Text>
+        <Text className="text-lg font-medium text-cyan-500">
+          Total: ${item?.totalPrice}
+        </Text>
         <TouchableOpacity
           className="rounded-md bg-slate-200 p-1"
           onPress={handleViewDetails}
