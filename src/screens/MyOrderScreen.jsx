@@ -9,6 +9,7 @@ import {
 import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
 import { useNavigation } from "@react-navigation/native";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 const products = [
   {
@@ -32,7 +33,35 @@ const products = [
 ];
 
 const MyOrderScreen = () => {
+  const [orders, setOrders] = useState([]);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const q = query(
+            collection(db, "orders"),
+            where("userId", "==", user.uid)
+          );
+          const querySnapshot = await getDocs(q);
+          const ordersList = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setOrders(ordersList);
+        } else {
+          console.log("No user is logged in");
+        }
+      } catch (error) {
+        console.error("Error fetching orders: ", error);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
   return (
     <ScrollView
       className="flex flex-col flex-1 p-5 bg-white"
@@ -40,7 +69,7 @@ const MyOrderScreen = () => {
     >
       <Text className="text-2xl font-bold mb-4">My Orders</Text>
       <FlatList
-        data={products}
+        data={orders}
         renderItem={({ item }) => <CartItem item={item} />}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={{ marginTop: 40 }}

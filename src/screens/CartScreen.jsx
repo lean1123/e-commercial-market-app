@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   FlatList,
   ScrollView,
@@ -8,21 +10,27 @@ import {
 } from "react-native";
 import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
-import { useNavigation } from "@react-navigation/native";
 import { auth, db } from "../configurations/firebaseConfig";
-import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
 
 const CartScreen = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [cartDetails, setCartDetails] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [isUpdated, setIsUpdated] = useState(false);
+  // const [totalPrice, setTotalPrice] = useState(0);
   const navigation = useNavigation();
+
+  const cartMap = useMemo(() => {
+    return new Map(cartDetails.map((item) => [item.productId, item]));
+  }, [cartDetails]);
+
+  const totalPrice = useMemo(() => {
+    if (selectedItems.length === 0) return 0;
+
+    return selectedItems.reduce((sum, selectedItem) => {
+      const cartItem = cartMap.get(selectedItem.productId);
+      return cartItem ? sum + cartItem.price * cartItem.quantity : sum;
+    }, 0);
+  }, [cartMap, selectedItems]);
 
   useEffect(() => {
     const fetchCartDetails = async () => {
@@ -34,45 +42,32 @@ const CartScreen = () => {
 
           if (cartSnap.exists()) {
             const cartData = cartSnap.data();
-            console.log("Cart Data:", cartData);
-
             const cartItems = cartData.cartDetails || [];
 
-            const productPromises = cartItems.map(async (item) => {
-              const productRef = doc(db, "products", item.productId);
-              const productSnap = await getDoc(productRef);
-              if (productSnap.exists()) {
-                const productData = productSnap.data();
-                return { ...item, name: productData.name };
-              }
-              return item;
-            });
+            const productsWithDetails = await Promise.all(
+              cartItems.map(async (item) => {
+                const productRef = doc(db, "products", item.productId);
+                const productSnap = await getDoc(productRef);
 
-            const productsWithDetails = await Promise.all(productPromises);
+                if (productSnap.exists()) {
+                  return { ...item, ...productSnap.data() };
+                }
+                return { ...item, name: "Unknown Product" };
+              })
+            );
+
             setCartDetails(productsWithDetails);
           }
-        } else {
-          console.log("No user is logged in");
         }
       } catch (error) {
         console.error("Error fetching cart details:", error);
+      } finally {
+        setIsUpdated(false);
       }
     };
 
     fetchCartDetails();
-  }, []);
-
-  useEffect(() => {
-    const calculateTotalPrice = () => {
-      const total = selectedItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
-      setTotalPrice(total);
-    };
-
-    calculateTotalPrice();
-  }, [selectedItems]);
+  }, [isUpdated]);
 
   const updateCartQuantity = async (item, newQuantity) => {
     try {
@@ -80,29 +75,44 @@ const CartScreen = () => {
       if (user) {
         const cartRef = doc(db, "carts", user.uid);
 
-        await updateDoc(cartRef, {
-          cartDetails: arrayRemove(item),
-        });
+        // Fetch the current cart details
+        const cartSnap = await getDoc(cartRef);
+        if (cartSnap.exists()) {
+          const cartData = cartSnap.data();
+          const updatedCartDetails = cartData.cartDetails.map((cartItem) =>
+            cartItem.productId === item.productId
+              ? { ...cartItem, quantity: newQuantity }
+              : cartItem
+          );
 
-        await updateDoc(cartRef, {
-          cartDetails: arrayUnion({
-            ...item,
-            quantity: newQuantity,
-          }),
-        });
+          // Update the cart with the new item
+          await updateDoc(cartRef, {
+            cartDetails: updatedCartDetails,
+          });
 
-        setCartDetails((prevItems) =>
-          prevItems.map((i) =>
-            i.productId === item.productId ? { ...i, quantity: newQuantity } : i
-          )
-        );
+          // Update the local state
 
-        console.log("Cart updated");
+          // setCartDetails(updatedCartDetails);
+
+          if (selectedItems.length > 0) {
+            setSelectedItems((prevItems) =>
+              prevItems.map((selectedItem) =>
+                selectedItem.productId === item.productId
+                  ? { ...selectedItem, quantity: newQuantity }
+                  : selectedItem
+              )
+            );
+          }
+
+          setIsUpdated(true);
+
+          console.log("Cart updated");
+        }
       } else {
         console.log("No user is logged in");
       }
     } catch (error) {
-      console.error("Error updating cart: ", error);
+      console.error("Error updating cart:", error);
     }
   };
 
@@ -112,7 +122,6 @@ const CartScreen = () => {
       updateCartQuantity(item, newQuantity);
     }
   };
-
   const handleCheckboxChange = (item) => {
     setSelectedItems((prevItems) => {
       if (prevItems.some((i) => i.productId === item.productId)) {
@@ -137,7 +146,7 @@ const CartScreen = () => {
             handleQuantityChange={handleQuantityChange}
           />
         )}
-        keyExtractor={(item, index) => item.productId?.toString()}
+        keyExtractor={(item) => item.productId?.toString()}
         contentContainerStyle={{ marginTop: 40 }}
         scrollEnabled={false}
       />
@@ -150,7 +159,7 @@ const CartScreen = () => {
       <TouchableOpacity
         className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4"
         onPress={() => {
-          navigation.navigate("CheckOutPage", { selectedItems });
+          navigation.navigate("CheckOutPage", { selectedItems, totalPrice });
         }}
       >
         <Text className="text-white text-base font-semibold mr-2">Next</Text>
