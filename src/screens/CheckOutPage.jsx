@@ -19,17 +19,20 @@ const CheckOutPage = ({ route }) => {
   const navigation = useNavigation();
 
   const dispatch = useDispatch();
-//   const { selectedItems } = route.params;
+  //   const { selectedItems } = route.params;
 
   const { selectedItems, totalPrice } = route.params;
 
-
-  const [paymentMethod, setPaymentMethod] = useState("paypal");
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   const handleOrderCreation = async () => {
     try {
       const user = auth.currentUser;
       if (user) {
+        if (!paymentMethod) {
+          Alert.alert("Error", "Please select a payment method.");
+          return;
+        }
         // Check if the ordered quantity exceeds the available stock
         for (const item of selectedItems) {
           const productRef = doc(db, "products", item.productId);
@@ -178,30 +181,6 @@ const CheckOutPage = ({ route }) => {
         onValueChange={(newValue) => setPaymentMethod(newValue)}
         value={paymentMethod}
       >
-        <View className="w-full border-b border-gray-300 mb-2 py-2">
-          <TouchableOpacity className="w-full flex flex-row justify-between items-center">
-            <View className="flex-row items-center">
-              <Image
-                source={require("../../assets/paypal-logo.png")}
-                className="w-10 h-10 mr-4"
-              />
-              <Text className="mr-4">PayPal</Text>
-            </View>
-            <RadioButton value="paypal" />
-          </TouchableOpacity>
-        </View>
-        <View className="w-full border-b border-gray-300 mb-2 py-2">
-          <TouchableOpacity className="w-full flex flex-row justify-between items-center">
-            <View className="flex-row items-center">
-              <Image
-                source={require("../../assets/paypal-logo.png")}
-                className="w-10 h-10 mr-4"
-              />
-              <Text className="mr-4">Credit Card</Text>
-            </View>
-            <RadioButton value="credit-card" />
-          </TouchableOpacity>
-        </View>
         <View className="w-full border-b border-gray-300 mb-2 py-2">
           <TouchableOpacity className="w-full flex flex-row justify-between items-center">
             <View className="flex-row items-center">

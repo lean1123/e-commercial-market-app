@@ -16,7 +16,6 @@ import MyOrderItem from "../components/MyOrderItem";
 
 // import { collection, getDocs, query, where } from "firebase/firestore";
 
-
 const products = [
   {
     id: 1,
@@ -44,7 +43,7 @@ const MyOrderScreen = () => {
 
   const user = auth.currentUser;
 
-  const [orders, setOrders] = React.useState([]);
+  // const [orders, setOrders] = React.useState([]);
 
   const fetchOrders = async () => {
     try {
@@ -78,54 +77,51 @@ const MyOrderScreen = () => {
     fetchOrders();
   }, []);
 
+  //   useEffect(() => {
+  //     const fetchOrders = async () => {
+  //       try {
+  //         const user = auth.currentUser;
+  //         if (user) {
+  //           const q = query(
+  //             collection(db, "orders"),
+  //             where("userId", "==", user.uid)
+  //           );
+  //           const querySnapshot = await getDocs(q);
+  //           const ordersList = querySnapshot.docs.map((doc) => ({
+  //             id: doc.id,
+  //             ...doc.data(),
+  //           }));
+  //           setOrders(ordersList);
+  //         } else {
+  //           console.log("No user is logged in");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching orders: ", error);
+  //       }
+  //     };
 
-//   useEffect(() => {
-//     const fetchOrders = async () => {
-//       try {
-//         const user = auth.currentUser;
-//         if (user) {
-//           const q = query(
-//             collection(db, "orders"),
-//             where("userId", "==", user.uid)
-//           );
-//           const querySnapshot = await getDocs(q);
-//           const ordersList = querySnapshot.docs.map((doc) => ({
-//             id: doc.id,
-//             ...doc.data(),
-//           }));
-//           setOrders(ordersList);
-//         } else {
-//           console.log("No user is logged in");
-//         }
-//       } catch (error) {
-//         console.error("Error fetching orders: ", error);
-//       }
-//     };
-
-//     fetchOrders();
-//   }, []);
-
+  //     fetchOrders();
+  //   }, []);
 
   return (
     <ScrollView
       className="flex-1 p-5 bg-white"
+      nestedScrollEnabled={true}
+      contentContainerStyle={{ padding: 5 }}
       // contentContainerStyle={{ alignItems: "center" }}
     >
       {/* <Text className="text-2xl font-bold mb-4">My Orders</Text> */}
       <FlatList
         data={orders}
-
         renderItem={({ item }) => <MyOrderItem item={item} key={item.id} />}
-
-//         renderItem={({ item }) => <CartItem item={item} />}
+        //         renderItem={({ item }) => <CartItem item={item} />}
 
         keyExtractor={(item) => item.id.toString()}
         scrollEnabled={false}
-        style
       />
 
       <TouchableOpacity
-        className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4"
+        className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4 mb-10"
         onPress={() => {
           navigation.navigate("myInfoScreen");
         }}
