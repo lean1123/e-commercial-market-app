@@ -2,10 +2,21 @@ import { View, Text, Image } from "react-native";
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMoneyBill, faStar } from "@fortawesome/free-solid-svg-icons";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const ProductCardItem = ({ product }) => {
+  const navigation = useNavigation();
   return (
-    <View className="p-3 flex-1 w-52 bg-slate-100 rounded-md shadow-md mr-4">
+    <TouchableOpacity
+      className="p-3 flex-1 w-52 bg-slate-100 rounded-md shadow-md mr-4"
+      onPress={() =>
+        navigation.navigate("ProductDetail", {
+          type: "productDetail",
+          data: product,
+        })
+      }
+    >
       <Image
         source={{ uri: product.image[0] || "https://picsum.photos/200" }}
         className="w-full h-40 rounded-md mb-6"
@@ -28,7 +39,7 @@ const ProductCardItem = ({ product }) => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
