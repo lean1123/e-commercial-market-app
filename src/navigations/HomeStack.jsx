@@ -43,7 +43,11 @@ const HomeStack = () => {
       >
         {() => <CategoryDetail />}
       </Stack.Screen> */}
-      <Stack.Screen name="FilterScreen" component={FilterScreen} />
+      <Stack.Screen
+        name="FilterScreen"
+        component={FilterScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="CheckOutPage" component={CheckOutPage} />
       <Stack.Screen name="CheckOutStatus" component={CheckOutStatusScreen} />
       <Stack.Screen

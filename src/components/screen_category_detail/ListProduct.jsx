@@ -38,19 +38,28 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
-  const { category, subCategory, products, loading, error } = useSelector(
-    (state) => state.search
-  );
+  const {
+    searchValue,
+    rangePrice,
+    rating,
+    category,
+    subCategory,
+    products,
+    loading,
+    error,
+  } = useSelector((state) => state.search);
   const dispatch = useDispatch();
 
   const [seeAll, setSeeAll] = React.useState(false);
   // const [listProduct, setListProduct] = React.useState(products);
 
   useEffect(() => {
-    dispatch(fetchProducts({ category, subCategory }));
+    dispatch(
+      fetchProducts({ searchValue, rangePrice, rating, category, subCategory })
+    );
     //setListProduct(products);
     setSeeAll(false);
-  }, [category, subCategory]);
+  }, [category, subCategory, searchValue, rangePrice, rating]);
 
   const handleSeeAll = () => {
     if (seeAll) setSeeAll(false);

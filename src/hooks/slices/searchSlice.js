@@ -1,9 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import { db } from '../../configurations/firebaseConfig';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, endAt, getDocs, orderBy, query, startAt, where } from 'firebase/firestore';
 
 const initialState = {
     searchValue: '',
+    rangePrice: [0, 1000000],
+    rating: 0,
     category: 'Electronics',
     subCategory: 'Mobile',
     products: [],
@@ -16,9 +18,16 @@ export const fetchProducts = createAsyncThunk(
     async (filter) => {
         const q = query(
             collection(db, 'products'),
+            orderBy('name'),
+            startAt(filter.searchValue),
+            endAt(filter.searchValue + '\uf8ff'),
+            where('price', '>=', filter.rangePrice[0]),
+            where('price', '<=', filter.rangePrice[1]),
+            where('rating', '>=', filter.rating),
             where('category', '==', filter.category),
             where('subCategory', '==', filter.subCategory)
         );
+        console.log(filter);
 
         const querySnapshot = await getDocs(q);
 
@@ -26,6 +35,7 @@ export const fetchProducts = createAsyncThunk(
             id: doc.id, 
             ...doc.data()
         }));
+        
         console.log(data);
         return data;
     }
@@ -45,6 +55,12 @@ const searchSlice = createSlice({
         setSubCategory: (state, action) => {
             state.subCategory = action.payload;
         },
+        setRangePrice: (state, action) => {
+            state.rangePrice = action.payload;
+        },
+        setRating: (state, action) => {
+            state.rating = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchProducts.pending, (state) => {
@@ -58,10 +74,11 @@ const searchSlice = createSlice({
         .addCase(fetchProducts.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
+            console.log(action.error.message);
         });
         
     }
 });
 
-export const {setSearchValue, setCategory, setSubCategory} = searchSlice.actions;
+export const {setSearchValue, setCategory, setSubCategory, setRangePrice, setRating} = searchSlice.actions;
 export default searchSlice.reducer;

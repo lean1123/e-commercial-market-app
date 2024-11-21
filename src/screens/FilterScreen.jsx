@@ -7,29 +7,53 @@ import { Checkbox, Icon, TextInput } from "react-native-paper";
 import FilterSubtitleItem from "../components/FilterSubtitleItem";
 import { AirbnbRating } from "react-native-ratings";
 import OrtherFilterSubItem from "../components/OrtherFilterSubItem";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { setRangePrice, setRating } from "../hooks/slices/searchSlice";
 
 const FilterScreen = () => {
-  const [value, setValue] = useState({ values: [0, 37] });
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [value, setValue] = useState({ values: [0, 5000] });
+  const [rate, setRate] = useState(0);
   const multiSliderValuesChange = (values) => {
     setValue({
       values,
     });
+    console.log(values);
+  };
+
+  const handleRating = (value) => {
+    setRate(value);
+    console.log(value);
+  };
+
+  const handleApply = () => {
+    dispatch(setRangePrice(value.values));
+    dispatch(setRating(rate));
+    console.log("value", value.values);
+    navigation.goBack();
   };
 
   return (
     <View className="flex-1 items-center p-5 bg-white">
       <View className="w-full flex-row items-center justify-between p-4 border-b border-gray-300">
-        <View className="flex-1 items-center">
+        <View className="flex-1">
           <Text className="text-xl font-bold">Filter</Text>
         </View>
-        <TouchableOpacity className="p-2">
-          <FontAwesomeIcon icon={faClose} size={16} />
+        <TouchableOpacity
+          className="p-2"
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
+          <FontAwesomeIcon icon={faClose} size={24} />
         </TouchableOpacity>
       </View>
 
-      <FilterSubtitleItem title={"Shipping options"} />
+      {/* <FilterSubtitleItem title={"Shipping options"} /> */}
 
-      <View className="w-full items-start border-b border-gray-300">
+      {/* <View className="w-full items-start border-b border-gray-300">
         <Checkbox.Item
           label="Instant (2 hours delivery)"
           status="unchecked"
@@ -48,20 +72,20 @@ const FilterScreen = () => {
           position="leading"
           style={{ marginLeft: -22 }}
         />
-      </View>
+      </View> */}
 
       <FilterSubtitleItem title={"Price range"} />
 
       <View className="w-full items-center border-b border-gray-300">
         <View className="flex-row justify-between w-full">
           <TextInput
-            label="10"
+            label={value.values[0].toString()}
             mode="outlined"
             style={{ width: "30%", height: 40 }}
             left={<TextInput.Icon icon={"currency-usd"} />}
           />
           <TextInput
-            label="1000"
+            label={value.values[1].toString()}
             mode="outlined"
             style={{ width: "30%", height: 40 }}
             left={<TextInput.Icon icon={"currency-usd"} />}
@@ -69,7 +93,7 @@ const FilterScreen = () => {
         </View>
         <MultiSlider
           values={[value.values[0], value.values[1]]}
-          sliderLength={200}
+          sliderLength={250}
           selectedStyle={{ backgroundColor: "#3ed7f8" }}
           containerStyle={{ alignSelf: "center", marginTop: -10 }}
           onValuesChange={multiSliderValuesChange}
@@ -80,17 +104,27 @@ const FilterScreen = () => {
             backgroundColor: "#3ed7f8",
           }}
           min={0}
-          max={37}
-          step={1}
+          max={5000}
+          step={100}
         />
       </View>
       <FilterSubtitleItem title={"Average review"} />
       <View className="w-full flex flex-row justify-center items-center border-b border-gray-300 py-4">
-        <AirbnbRating showRating={false} size={20} defaultRating={5} />
-        <Text className="ml-2">& Up</Text>
+        <AirbnbRating
+          showRating={false}
+          size={20}
+          defaultRating={rate}
+          // onValuesChange={(rating) => {
+          //   handleRating(rating);
+          // }}
+          onFinishRating={(rating) => {
+            handleRating(rating);
+          }}
+        />
+        {/* <Text className="ml-2">& Up</Text> */}
       </View>
 
-      <FilterSubtitleItem title={"Orthers"} />
+      {/* <FilterSubtitleItem title={"Orthers"} />
       <View className="w-full items-center mt-2">
         <View className="w-full flex-row justify-between items-center px-2">
           <OrtherFilterSubItem
@@ -109,6 +143,16 @@ const FilterScreen = () => {
             iconName={"map-marker-outline"}
           />
         </View>
+      </View> */}
+      <View className="w-full flex-row justify-center items-center mt-5">
+        <TouchableOpacity
+          className="bg-sky-300 rounded-md w-1/2 flex-row items-center justify-center py-3"
+          onPress={() => {
+            handleApply();
+          }}
+        >
+          <Text className="text-white text-base font-semibold">Apply</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

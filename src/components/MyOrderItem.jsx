@@ -50,7 +50,9 @@ export default function MyOrderItem({ item }) {
 
   const handleViewDetails = () => {
     setShowDetails(!showDetails);
-    fetchProductOrderDetails();
+    if (!showDetails) {
+      fetchProductOrderDetails();
+    }
   };
   return (
     <View className="w-full border rounded-sm border-gray-300 mt-3 p-5 justify-between">

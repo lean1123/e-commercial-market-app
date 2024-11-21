@@ -53,7 +53,7 @@ const HomeScreen = ({ navigation }) => {
   return (
     <ScrollView className="flex-1 p-5 bg-white">
       {/* <Header title="Home" /> */}
-      <View className="w-full flex-row items-center justify-between mb-5">
+      {/* <View className="w-full flex-row items-center justify-between mb-5">
         <View className="w-4/5 rounded-md p-2 flex-row items-center bg-slate-100">
           <FontAwesomeIcon icon={faSearch} />
           <TextInput placeholder="Search for product" className="ml-2 w-full" />
@@ -64,7 +64,7 @@ const HomeScreen = ({ navigation }) => {
         >
           <FontAwesomeIcon icon={faFilter} size={16} />
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View className="mb-5">
         <FlatList
           data={listCategory}
