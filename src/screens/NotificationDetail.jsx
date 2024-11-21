@@ -9,12 +9,12 @@ const data = {
   seen: false,
 };
 
-export default function NotificationDetail({ item }) {
-  item = item || data;
+export default function NotificationDetail({ route }) {
+  const { item } = route.params;
   return (
     <View className="flex-1 bg-white p-5">
-      <Text className="text-lg font-bold">{item.title}</Text>
-      <Text className="text-base">{item.content}</Text>
+      <Text className="text-lg font-bold">{item?.title}</Text>
+      <Text className="text-base">{item?.message}</Text>
     </View>
   );
 }

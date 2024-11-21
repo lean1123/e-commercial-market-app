@@ -34,14 +34,21 @@ const FavouriteStack = () => {
           header: () => <Header title="Favourite" />,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="ProductDetail"
         options={{
           header: () => <Header title={product.name} parent={false} />,
         }}
       >
         {() => <ProductDetail data={product} type={"clothes"} />}
-      </Stack.Screen>
+      </Stack.Screen> */}
+      <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
+        options={{
+          header: () => <Header title="Product Detail" />,
+        }}
+      />
     </Stack.Navigator>
   );
 };

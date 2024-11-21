@@ -38,42 +38,48 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
-  
-   const { category, subCategory, products, loading, error } = useSelector(
+  const { category, subCategory, products, loading, error } = useSelector(
     (state) => state.search
   );
   const dispatch = useDispatch();
-  const [listProduct, setListProduct] = React.useState(products);
+
+  const [seeAll, setSeeAll] = React.useState(false);
+  // const [listProduct, setListProduct] = React.useState(products);
 
   useEffect(() => {
     dispatch(fetchProducts({ category, subCategory }));
-    setListProduct(products);
+    //setListProduct(products);
+    setSeeAll(false);
   }, [category, subCategory]);
-  
-  const [products, setProducts] = React.useState([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const q = query(
-          collection(db, "products"),
-          where("category", "==", "Electronics")
-        );
-        const querySnapshot = await getDocs(q);
-        const productsList = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+  const handleSeeAll = () => {
+    if (seeAll) setSeeAll(false);
+    else setSeeAll(true);
+  };
 
-        setProducts(productsList);
-      } catch (error) {
-        console.error("Error fetching products: ", error);
-      }
-    };
+  //const [products, setProducts] = React.useState([]);
 
-    fetchProducts();
-  }, [categoryName]);
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const q = query(
+  //         collection(db, "products"),
+  //         where("category", "==", "Electronics")
+  //       );
+  //       const querySnapshot = await getDocs(q);
+  //       const productsList = querySnapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
 
+  //       setProducts(productsList);
+  //     } catch (error) {
+  //       console.error("Error fetching products: ", error);
+  //     }
+  //   };
+
+  //   fetchProducts();
+  // }, [categoryName]);
 
   return (
     <View className="flex-1 bg-white mt-4">
@@ -85,7 +91,7 @@ export default function ListProduct({ categoryName }) {
       )}
       {!loading && !error && (
         <FlatList
-          data={products}
+          data={seeAll ? products : products.slice(0, 4)}
           renderItem={({ item }) => <ProductItem data={item} />}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
@@ -93,9 +99,11 @@ export default function ListProduct({ categoryName }) {
       )}
       <TouchableOpacity
         className="bg-gray-200 py-3 rounded-md mt-4"
-        onPress={() => alert("See all")}
+        onPress={handleSeeAll}
       >
-        <Text className="text-gray-700 text-center">See all</Text>
+        <Text className="text-gray-700 text-center">
+          {seeAll ? "Show less" : "See all"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -79,6 +79,19 @@ export default function RegisterScreen() {
                   console.log("Cart already exists!");
                 }
 
+                // wishlist
+                const wishlistRef = doc(db, "wishlists", uid);
+                const wishlistSnap = await getDoc(wishlistRef);
+                if (!wishlistSnap.exists()) {
+                  await setDoc(wishlistRef, {
+                    userId: uid,
+                    wishlistDetails: [],
+                  });
+                  console.log("Wishlist created!");
+                } else {
+                  console.log("Wishlist already exists!");
+                }
+
                 navigation.navigate("Home", { uid });
               } catch (error) {
                 console.error("Error registering user: ", error);

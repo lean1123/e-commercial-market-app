@@ -1,11 +1,15 @@
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { setCategory } from "../hooks/slices/searchSlice";
 
 const CategoryItem = ({ category }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const handleOnPressCategory = () => {
+    dispatch(setCategory(category.name));
     navigation.navigate("CategoryDetail");
   };
 

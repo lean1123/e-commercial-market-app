@@ -86,7 +86,7 @@ const FilterScreen = () => {
       </View>
       <FilterSubtitleItem title={"Average review"} />
       <View className="w-full flex flex-row justify-center items-center border-b border-gray-300 py-4">
-        <AirbnbRating showRating={false} size={20} />
+        <AirbnbRating showRating={false} size={20} defaultRating={5} />
         <Text className="ml-2">& Up</Text>
       </View>
 

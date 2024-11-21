@@ -9,11 +9,14 @@ import FavouriteStack from "./FavouriteStack";
 import HomeStack from "./HomeStack";
 import MyInfoStack from "./MyInfoStack";
 import NotificationStack from "./NotificationStack";
-import SearchStack from "./SearchStack";
+import { useSelector } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 function MainTab() {
+  const { numOfUnreadNotifications } = useSelector(
+    (state) => state.notification
+  );
   return (
     <Tab.Navigator
       screenOptions={{
@@ -94,7 +97,8 @@ function MainTab() {
               color={color}
             />
           ),
-          tabBarBadge: 3,
+          tabBarBadge:
+            numOfUnreadNotifications > 0 ? numOfUnreadNotifications : null,
         }}
       />
       <Tab.Screen

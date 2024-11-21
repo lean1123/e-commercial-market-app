@@ -1,8 +1,17 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { ImageSlider } from "react-native-image-slider-banner";
 
 export default function SliderBanner({ data }) {
+  const [images, setImages] = React.useState([]);
+  useEffect(() => {
+    if (data && data.length > 0 && data[0]?.img === undefined) {
+      const formattedData = data.map((item) => ({ img: item }));
+      setImages(formattedData);
+    } else {
+      setImages(data);
+    }
+  }, [data]);
   return (
     <View
       style={{
@@ -12,7 +21,7 @@ export default function SliderBanner({ data }) {
       }}
     >
       <ImageSlider
-        data={data}
+        data={images}
         autoPlay={false}
         caroselImageStyle={{
           height: 170,
