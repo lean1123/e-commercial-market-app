@@ -11,7 +11,7 @@ import CartItem from "../components/CartItem";
 import { useNavigation } from "@react-navigation/native";
 
 import { auth, db } from "../configurations/firebaseConfig";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import MyOrderItem from "../components/MyOrderItem";
 
 // import { collection, getDocs, query, where } from "firebase/firestore";
@@ -43,13 +43,15 @@ const MyOrderScreen = () => {
 
   const user = auth.currentUser;
 
-  // const [orders, setOrders] = React.useState([]);
-
   const fetchOrders = async () => {
     try {
       if (user) {
         const ordersRef = collection(db, "orders");
-        const q = query(ordersRef, where("userId", "==", user.uid));
+        const q = query(
+          ordersRef,
+          where("userId", "==", user.uid),
+          orderBy("createdAt", "desc")
+        );
         const querySnapshot = await getDocs(q);
 
         const orderData = querySnapshot.docs.map((doc) => {
@@ -121,7 +123,7 @@ const MyOrderScreen = () => {
       />
 
       <TouchableOpacity
-        className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4 mb-10"
+        className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4 mb-8"
         onPress={() => {
           navigation.navigate("myInfoScreen");
         }}
