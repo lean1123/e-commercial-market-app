@@ -7,18 +7,25 @@ const ProductCardItem = ({ product }) => {
   return (
     <View className="p-3 flex-1 w-52 bg-slate-100 rounded-md shadow-md mr-4">
       <Image
-        source={{ uri: "https://picsum.photos/200" }}
+        source={{ uri: product.image[0] || "https://picsum.photos/200" }}
         className="w-full h-40 rounded-md mb-6"
       />
-      <Text className="text-lg font-bold mb-4">Product Name</Text>
+      <Text className="text-lg font-bold mb-4">
+        {product?.name.length > 16
+          ? `${product?.name.substring(0, 16)}...`
+          : product?.name}
+      </Text>
       <View className="flex-row justify-between mb-4">
         <View className="flex-row items-center">
           <FontAwesomeIcon icon={faStar} color="#fde047" size={20} />
-          <Text className="ml-1 text-sm font-bold"> 4.5</Text>
+          <Text className="ml-1 text-sm font-bold"> {product.rating}</Text>
         </View>
         <View className="flex-row items-center">
           <FontAwesomeIcon icon={faMoneyBill} color="#38bdf8" />
-          <Text className="ml-1 text-sm font-bold text-sky-400"> 200.00</Text>
+          <Text className="ml-1 text-sm font-bold text-sky-400">
+            {" "}
+            {product?.price}
+          </Text>
         </View>
       </View>
     </View>
