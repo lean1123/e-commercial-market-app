@@ -1,15 +1,20 @@
 import { View, Text, Image } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { auth } from "../configurations/firebaseConfig";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchNumOfItemsInCart } from "../hooks/slices/cartSlice";
 
 export default function Header({ title, parent, notShowCart }) {
   const navigate = useNavigation();
   const user = auth.currentUser;
+  const dispatch = useDispatch();
   const { numOfItemsInCart } = useSelector((state) => state.cart);
+  useEffect(() => {
+    dispatch(fetchNumOfItemsInCart({ userId: user?.uid }));
+  }, []);
   return (
     <View className="flex-row h-[90px] bg-white justify-between items-center border-b-[1px] border-gray-100 pt-8 px-5 pb-2">
       <View className="flex-row items-center gap-2">
