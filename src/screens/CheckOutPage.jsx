@@ -1,7 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { collection, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Icon, RadioButton } from "react-native-paper";
 import { auth, db } from "../configurations/firebaseConfig";
 
@@ -15,6 +22,25 @@ const CheckOutPage = ({ route }) => {
     try {
       const user = auth.currentUser;
       if (user) {
+        // Check if the ordered quantity exceeds the available stock
+        for (const item of selectedItems) {
+          const productRef = doc(db, "products", item.productId);
+          const productSnap = await getDoc(productRef);
+          if (productSnap.exists()) {
+            const productData = productSnap.data();
+            if (item.quantity > productData.quantityInStock) {
+              Alert.alert(
+                "Error",
+                `Ordered quantity for ${item.name} exceeds available stock.`
+              );
+              return;
+            }
+          } else {
+            Alert.alert("Error", `Product ${item.name} not found.`);
+            return;
+          }
+        }
+
         const orderDetails = selectedItems.map((item) => ({
           productId: item.productId,
           qty: item.quantity,
@@ -101,7 +127,10 @@ const CheckOutPage = ({ route }) => {
                   </View>
                 </View>
                 <View className="flex flex-col">
-                  <TouchableOpacity className="mb-6">
+                  <TouchableOpacity
+                    className="mb-6"
+                    onPress={() => navigation.navigate("CartScreen")}
+                  >
                     <Icon source={"pencil"} size={16} />
                   </TouchableOpacity>
                   <Text>X{item.quantity}</Text>
