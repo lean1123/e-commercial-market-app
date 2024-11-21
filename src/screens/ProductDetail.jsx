@@ -10,6 +10,7 @@ import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../configurations/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleWishlist } from "../hooks/slices/wishlistSlice";
+import { fetchNumOfItemsInCart } from "../hooks/slices/cartSlice";
 
 const image = [
   {
@@ -93,7 +94,7 @@ export default function ProductDetail({ type, route }) {
               }),
             });
           }
-
+          dispatch(fetchNumOfItemsInCart({ userId: user.uid }));
           Alert.alert("Product added to cart");
         } else {
           Alert.alert("Error", "Product not found.");
