@@ -16,9 +16,15 @@ const CheckOutStatusScreen = ({ route }) => {
         ) : (
           <Icon source={"close-circle"} size={100} color="red" />
         )}
-        <Text className="text-sky-400 text-xl font-semibold">
-          {status ? "Order Placed Successfully!" : "Order Failed!"}
-        </Text>
+        {status === "success" ? (
+          <Text className="text-green-600 text-xl font-semibold">
+            Order Placed Successfully
+          </Text>
+        ) : (
+          <Text className="text-red-600 text-xl font-semibold">
+            Order Placed Failed
+          </Text>
+        )}
       </View>
       <View className="flex flex-col border-b border-gray-300"></View>
 

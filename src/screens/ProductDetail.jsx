@@ -39,7 +39,10 @@ export default function ProductDetail({ type, route }) {
         const productSnap = await getDoc(productRef);
         if (productSnap.exists()) {
           const productData = productSnap.data();
-          if (quantity > productData.quantityInStock) {
+          if (
+            quantity > productData.quantityInStock ||
+            productData.quantityInStock === 0
+          ) {
             Alert.alert("Error", "Ordered quantity exceeds available stock.");
             return;
           }
@@ -198,7 +201,7 @@ export default function ProductDetail({ type, route }) {
         </View>
       </View>
 
-      <Reviews />
+      <Reviews productId={data?.id} />
 
       <View className="flex-1 flex-row justify-start mb-10 gap-4">
         <TouchableOpacity
