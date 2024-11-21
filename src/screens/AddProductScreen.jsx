@@ -12,7 +12,6 @@ import moment from "moment";
 import * as ImagePicker from "expo-image-picker";
 import Picker from "react-native-picker-select";
 import { TouchableOpacity } from "react-native";
-import { app, db } from "../../src/configurations/firebaseConfig";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
@@ -123,7 +122,7 @@ export default function AddProductScreen() {
       ToastAndroid.show("Sub category is required", ToastAndroid.SHORT);
       return;
     }
-    if (!values.qtyInStock) {
+    if (!values.quantityInStock) {
       ToastAndroid.show("Quantity in stock is required", ToastAndroid.SHORT);
       return;
     }
@@ -197,7 +196,7 @@ export default function AddProductScreen() {
           subCategory: "",
           color: [] || null,
           size: [] || null,
-          qtyInStock: 0,
+          quantityInStock: 0,
           createDate: moment(Date.now()).format("hh:mm:ss DD/MM/YYYY"),
         }}
         onSubmit={(values) => {
@@ -290,6 +289,46 @@ export default function AddProductScreen() {
                         label: "White",
                         value: "White",
                       },
+                      {
+                        label: "Yellow",
+                        value: "Yellow",
+                      },
+                      {
+                        label: "Purple",
+                        value: "Purple",
+                      },
+                      {
+                        label: "Pink",
+                        value: "Pink",
+                      },
+                      {
+                        label: "Orange",
+                        value: "Orange",
+                      },
+                      {
+                        label: "Brown",
+                        value: "Brown",
+                      },
+                      {
+                        label: "Gray",
+                        value: "Gray",
+                      },
+                      {
+                        label: "Violet",
+                        value: "Violet",
+                      },
+                      {
+                        label: "Cyan",
+                        value: "Cyan",
+                      },
+                      {
+                        label: "Magenta",
+                        value: "Magenta",
+                      },
+                      {
+                        label: "Maroon",
+                        value: "Maroon",
+                      },
                     ]}
                     save="value"
                     label="Color"
@@ -317,9 +356,9 @@ export default function AddProductScreen() {
             <TextInput
               style={styles.input}
               placeholder="Quantity in stock"
-              value={values?.qtyInStock}
+              value={values?.quantityInStock}
               keyboardType="number-pad"
-              onChangeText={handleChange("qtyInStock")}
+              onChangeText={handleChange("quantityInStock")}
             ></TextInput>
 
             {/* image */}

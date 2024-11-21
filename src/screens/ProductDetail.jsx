@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert } from "react-native";
+import { View, Text, ScrollView, Alert, ToastAndroid } from "react-native";
 import React from "react";
 import Header from "../components/Header";
 import SliderBanner from "../components/screen_category_detail/SliderBanner";
@@ -6,8 +6,10 @@ import { Feather } from "@expo/vector-icons";
 import Reviews from "../components/Reviews";
 import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../configurations/firebaseConfig";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleWishlist } from "../hooks/slices/wishlistSlice";
 
 const image = [
   {
@@ -30,6 +32,9 @@ export default function ProductDetail({ type, route }) {
   const [quantity, setQuantity] = React.useState(1);
   const [selectedColor, setSelectedColor] = React.useState(data?.color[0]);
   const [selectedSize, setSelectedSize] = React.useState(data?.size[0]);
+
+  const { active } = useSelector((state) => state.wishlist);
+  const dispatch = useDispatch();
 
   const addToCart = async () => {
     try {
@@ -102,13 +107,56 @@ export default function ProductDetail({ type, route }) {
     }
   };
 
+  const addToWishlist = async () => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const productRef = doc(db, "products", data.id);
+        const productSnap = await getDoc(productRef);
+        const wishlistRef = doc(db, "wishlists", user.uid);
+        const wishlistSnap = await getDoc(wishlistRef);
+        if (productSnap.exists()) {
+          if (wishlistSnap.exists()) {
+            await updateDoc(wishlistRef, {
+              wishlistDetails: arrayUnion({
+                productId: data.id,
+              }),
+            });
+          } else {
+            await setDoc(wishlistRef, {
+              userId: user.uid,
+              wishlistDetails: [
+                {
+                  productId: data.id,
+                },
+              ],
+            });
+          }
+          dispatch(toggleWishlist(active));
+          console.log("Product added to wishlist");
+          ToastAndroid.show("Product added to wishlist", ToastAndroid.SHORT);
+        } else {
+          Alert.alert("Error", "Product not found.");
+        }
+      } else {
+        Alert.alert("Error", "No user is logged in.");
+      }
+    } catch (error) {
+      console.error("Error adding product to wishlist: ", error);
+      Alert.alert("Error", "Failed to add product to wishlist.");
+    }
+  };
+
   return (
     <ScrollView className="flex-1 p-5 bg-white">
       {/* <Header title="Product Detail" /> */}
-      <SliderBanner data={image} />
+      <SliderBanner data={data?.image} />
       <View className="flex-row justify-between items-center mb-2">
         <Text className="text-3xl font-bold text-cyan-400">${data?.price}</Text>
-        <TouchableOpacity className="w-10 h-10 rounded-full bg-gray-100 flex-row items-center justify-center">
+        <TouchableOpacity
+          className="w-10 h-10 rounded-full bg-gray-100 flex-row items-center justify-center"
+          onPress={addToWishlist}
+        >
           <Feather name="heart" size={20} />
         </TouchableOpacity>
       </View>
@@ -132,7 +180,7 @@ export default function ProductDetail({ type, route }) {
         <Text className="text-lg text-gray-500 mt-3">{data?.description}</Text>
       </View>
       {/* option */}
-      {type === "clothes" && (
+      {!data?.color[0] == null && (
         <View className="">
           <View className="mt-4">
             <Text className="text-lg font-semibold">Color</Text>

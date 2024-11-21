@@ -9,7 +9,13 @@ import {
 import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
 import { useNavigation } from "@react-navigation/native";
+
+import { auth, db } from "../configurations/firebaseConfig";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import MyOrderItem from "../components/MyOrderItem";
+
+// import { collection, getDocs, query, where } from "firebase/firestore";
+
 
 const products = [
   {
@@ -36,43 +42,84 @@ const MyOrderScreen = () => {
   const [orders, setOrders] = useState([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const user = auth.currentUser;
-        if (user) {
-          const q = query(
-            collection(db, "orders"),
-            where("userId", "==", user.uid)
-          );
-          const querySnapshot = await getDocs(q);
-          const ordersList = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
-          setOrders(ordersList);
-        } else {
-          console.log("No user is logged in");
-        }
-      } catch (error) {
-        console.error("Error fetching orders: ", error);
-      }
-    };
+  const user = auth.currentUser;
 
+  const [orders, setOrders] = React.useState([]);
+
+  const fetchOrders = async () => {
+    try {
+      if (user) {
+        const ordersRef = collection(db, "orders");
+        const q = query(ordersRef, where("userId", "==", user.uid));
+        const querySnapshot = await getDocs(q);
+
+        const orderData = querySnapshot.docs.map((doc) => {
+          const data = doc.data();
+
+          // Chuyển đổi các Timestamp thành chuỗi
+          return {
+            id: doc.id,
+            ...data,
+            createdAt: data.createdAt.toDate().toLocaleString(), // Chuyển `createdAt` thành chuỗi
+            updatedAt: data.updatedAt.toDate().toLocaleString(), // Chuyển `updatedAt` thành chuỗi
+          };
+        });
+
+        setOrders(orderData);
+      } else {
+        console.error("User is not logged in");
+      }
+    } catch (error) {
+      console.error("Error fetching orders: ", error);
+    }
+  };
+
+  React.useEffect(() => {
     fetchOrders();
   }, []);
 
+
+//   useEffect(() => {
+//     const fetchOrders = async () => {
+//       try {
+//         const user = auth.currentUser;
+//         if (user) {
+//           const q = query(
+//             collection(db, "orders"),
+//             where("userId", "==", user.uid)
+//           );
+//           const querySnapshot = await getDocs(q);
+//           const ordersList = querySnapshot.docs.map((doc) => ({
+//             id: doc.id,
+//             ...doc.data(),
+//           }));
+//           setOrders(ordersList);
+//         } else {
+//           console.log("No user is logged in");
+//         }
+//       } catch (error) {
+//         console.error("Error fetching orders: ", error);
+//       }
+//     };
+
+//     fetchOrders();
+//   }, []);
+
+
   return (
     <ScrollView
-      className="flex flex-col flex-1 p-5 bg-white"
-      contentContainerStyle={{ alignItems: "center" }}
+      className="flex-1 p-5 bg-white"
+      // contentContainerStyle={{ alignItems: "center" }}
     >
-      <Text className="text-2xl font-bold mb-4">My Orders</Text>
+      {/* <Text className="text-2xl font-bold mb-4">My Orders</Text> */}
       <FlatList
         data={orders}
-        renderItem={({ item }) => <CartItem item={item} />}
+
+        renderItem={({ item }) => <MyOrderItem item={item} key={item.id} />}
+
+//         renderItem={({ item }) => <CartItem item={item} />}
+
         keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ marginTop: 40 }}
         scrollEnabled={false}
         style
       />

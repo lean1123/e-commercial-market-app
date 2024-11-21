@@ -1,7 +1,7 @@
 import { faFilter, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { styled } from "nativewind";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FlatList,
   ScrollView,
@@ -15,6 +15,8 @@ import ProductMainBanner from "../components/ProductBanner";
 import ProductSubBanner from "../components/ProductSubBanner";
 import ProductCardItem from "../components/ProductCardItem";
 import Header from "../components/Header";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import { db } from "../configurations/firebaseConfig";
 
 const StyledText = styled(Text);
 
@@ -50,10 +52,31 @@ var listCategory = [
 ];
 
 const HomeScreen = ({ navigation }) => {
+  const [recommendedProducts, setRecommendedProducts] = React.useState([]);
+  const fetchRecommendedProducts = async () => {
+    try {
+      const q = query(
+        collection(db, "products"),
+        orderBy("createDate", "desc"),
+        limit(5)
+      );
+      const querySnapshot = await getDocs(q);
+      const products = querySnapshot.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+      setRecommendedProducts(products);
+    } catch (error) {
+      console.error("Error fetching recommended products: ", error);
+    }
+  };
+  useEffect(() => {
+    fetchRecommendedProducts();
+    console.log("Recommended products: ", recommendedProducts);
+  }, []);
   return (
     <ScrollView className="flex-1 p-5 bg-white">
       {/* <Header title="Home" /> */}
-      <View className="w-full flex-row items-center justify-between mb-5">
+      {/* <View className="w-full flex-row items-center justify-between mb-5">
         <View className="w-4/5 rounded-md p-2 flex-row items-center bg-slate-100">
           <FontAwesomeIcon icon={faSearch} />
           <TextInput placeholder="Search for product" className="ml-2 w-full" />
@@ -64,7 +87,7 @@ const HomeScreen = ({ navigation }) => {
         >
           <FontAwesomeIcon icon={faFilter} size={16} />
         </TouchableOpacity>
-      </View>
+      </View> */}
       <View className="mb-5">
         <FlatList
           data={listCategory}
@@ -99,7 +122,7 @@ const HomeScreen = ({ navigation }) => {
 
       <View className="mb-5">
         <FlatList
-          data={listCategory}
+          data={recommendedProducts}
           renderItem={({ item }) => <ProductCardItem product={item} />}
           keyExtractor={(item) => item.id.toString()}
           horizontal={true}

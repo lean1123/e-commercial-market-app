@@ -11,10 +11,18 @@ import {
 } from "react-native";
 import { Icon, RadioButton } from "react-native-paper";
 import { auth, db } from "../configurations/firebaseConfig";
+import moment from "moment";
+import { useDispatch } from "react-redux";
+import { fetchNumOfUnreadNotifications } from "../hooks/slices/notificationSlice";
 
 const CheckOutPage = ({ route }) => {
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+//   const { selectedItems } = route.params;
+
   const { selectedItems, totalPrice } = route.params;
+
 
   const [paymentMethod, setPaymentMethod] = useState("paypal");
 
@@ -91,6 +99,18 @@ const CheckOutPage = ({ route }) => {
             cartDetails: updatedCartDetails,
           });
         }
+
+        // Create notification
+        const notificationRef = doc(collection(db, "notifications"));
+        await setDoc(notificationRef, {
+          userId: user.uid,
+          title: "Order Placed",
+          message: "Your order has been placed successfully",
+          read: false,
+          createdAt: moment(Date.now()).format("hh:mm:ss DD/MM/YYYY"),
+        });
+
+        dispatch(fetchNumOfUnreadNotifications({ userId: user.uid }));
 
         console.log("Order created successfully");
         navigation.navigate("CheckOutStatus", { status: "success" });

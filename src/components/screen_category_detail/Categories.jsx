@@ -1,10 +1,10 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setCategory, setSubCategory } from "../../hooks/slices/searchSlice";
 
-const categories = [
+const ElectronicsCategories = [
   {
     id: 1,
     name: "Mobile",
@@ -26,35 +26,102 @@ const categories = [
     bgcolor: "#FBD3E9",
     borderColor: "#F973D7",
   },
+];
+
+const FashionCategories = [
   {
-    id: 4,
-    name: "Camera",
-    image: "https://img.icons8.com/ios/452/headphones.png",
+    id: 1,
+    name: "Clothes",
+    image: "https://img.icons8.com/ios/452/t-shirt.png",
+    bgcolor: "#FFDDC1",
+    borderColor: "#FFA45B",
+  },
+  {
+    id: 2,
+    name: "Shoe",
+    image: "https://img.icons8.com/ios/452/sneakers.png",
     bgcolor: "#C9EAFD",
     borderColor: "#3ECCCD",
   },
   {
-    id: 5,
-    name: "Watch",
-    image: "https://img.icons8.com/ios/452/camera.png",
+    id: 3,
+    name: "Accessories",
+    image: "https://img.icons8.com/?size=100&id=48819&format=png&color=000000",
+    bgcolor: "#FBD3E9",
+    borderColor: "#F973D7",
+  },
+];
+
+const BeautyCategories = [
+  {
+    id: 1,
+    name: "Makeup",
+    image:
+      "https://img.icons8.com/?size=100&id=MyV06oafbDPL&format=png&color=000000",
     bgcolor: "#FFDDC1",
     borderColor: "#FFA45B",
+  },
+  {
+    id: 2,
+    name: "Skincare",
+    image:
+      "https://img.icons8.com/?size=100&id=PpdHW0TYXWj4&format=png&color=000000",
+    bgcolor: "#C9EAFD",
+    borderColor: "#3ECCCD",
+  },
+  {
+    id: 3,
+    name: "Haircare",
+    image: "https://img.icons8.com/ios/452/hair-dryer.png",
+    bgcolor: "#FBD3E9",
+    borderColor: "#F973D7",
+  },
+];
+
+const FreshFruitCategories = [
+  {
+    id: 1,
+    name: "Vegetables",
+    image: "https://img.icons8.com/?size=100&id=118888&format=png&color=000000",
+    bgcolor: "#FFDDC1",
+    borderColor: "#FFA45B",
+  },
+  {
+    id: 2,
+    name: "Fruits",
+    image: "https://img.icons8.com/ios/452/apple.png",
+    bgcolor: "#C9EAFD",
+    borderColor: "#3ECCCD",
   },
 ];
 
 export default function Categories() {
-  const [selectedCategory, setSelectedCategory] = React.useState("Mobile");
-  //const [selectedLevel, setSelectedLevel] = React.useState("Best Sales");
   const [isSeeAll, setIsSeeAll] = React.useState(false);
 
   const dispatch = useDispatch();
+  const { category, subCategory } = useSelector((state) => state.search);
 
-  const { category } = useSelector((state) => state.search);
+  useEffect(() => {
+    switch (category) {
+      case "Electronics":
+        dispatch(setSubCategory("Mobile"));
+        break;
+      case "Fashion":
+        dispatch(setSubCategory("Clothes"));
+        break;
+      case "Beauty":
+        dispatch(setSubCategory("Makeup"));
+        break;
+      case "Fresh Fruit":
+        dispatch(setSubCategory("Vegetables"));
+        break;
+      default:
+        dispatch(setSubCategory("Mobile"));
+    }
+  }, []);
 
   const handleSelectCategory = (name) => {
-    setSelectedCategory(name);
     dispatch(setSubCategory(name));
-    dispatch(setCategory("Electronics"));
     console.log(category);
     console.log(name);
   };
@@ -82,18 +149,24 @@ export default function Categories() {
       {/* FlatList Section */}
       <FlatList
         key={isSeeAll ? 2 : 1}
-        data={categories}
+        data={
+          category === "Electronics"
+            ? ElectronicsCategories
+            : category === "Fashion"
+            ? FashionCategories
+            : category === "Beauty"
+            ? BeautyCategories
+            : FreshFruitCategories
+        }
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => handleSelectCategory(item.name)}
             className="justify-center items-center rounded-lg mr-5"
             style={{
               backgroundColor: item.bgcolor,
-              borderWidth: item.name === selectedCategory ? 2 : 0,
+              borderWidth: item.name === subCategory ? 2 : 0,
               borderColor:
-                item.name === selectedCategory
-                  ? item.borderColor
-                  : "transparent",
+                item.name === subCategory ? item.borderColor : "transparent",
               margin: isSeeAll ? 10 : 0,
               width: isSeeAll ? "45%" : 110,
               height: isSeeAll ? 120 : 110,

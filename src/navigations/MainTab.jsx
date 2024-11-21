@@ -9,11 +9,22 @@ import FavouriteStack from "./FavouriteStack";
 import HomeStack from "./HomeStack";
 import MyInfoStack from "./MyInfoStack";
 import NotificationStack from "./NotificationStack";
-import SearchStack from "./SearchStack";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchNumOfUnreadNotifications } from "../hooks/slices/notificationSlice";
+import { auth } from "../configurations/firebaseConfig";
 
 const Tab = createBottomTabNavigator();
 
 function MainTab() {
+  const { numOfUnreadNotifications } = useSelector(
+    (state) => state.notification
+  );
+  const user = auth.currentUser;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchNumOfUnreadNotifications({ userId: user.uid }));
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={{
@@ -94,7 +105,8 @@ function MainTab() {
               color={color}
             />
           ),
-          tabBarBadge: 3,
+          tabBarBadge:
+            numOfUnreadNotifications > 0 ? numOfUnreadNotifications : null,
         }}
       />
       <Tab.Screen

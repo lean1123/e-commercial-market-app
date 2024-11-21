@@ -11,10 +11,12 @@ import CartScreen from "../screens/CartScreen";
 import Header from "../components/Header";
 import CategoryDetail from "../screens/CategoryDetail";
 import ProductDetail from "../screens/ProductDetail";
+import { useSelector } from "react-redux";
 
 const Stack = createStackNavigator();
 
 const HomeStack = () => {
+  const { category } = useSelector((state) => state.search);
   return (
     <Stack.Navigator
       initialRouteName="HomeScreen"
@@ -41,7 +43,11 @@ const HomeStack = () => {
       >
         {() => <CategoryDetail />}
       </Stack.Screen> */}
-      <Stack.Screen name="FilterScreen" component={FilterScreen} />
+      <Stack.Screen
+        name="FilterScreen"
+        component={FilterScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name="CheckOutPage" component={CheckOutPage} />
       <Stack.Screen
         name="CheckOutStatus"
@@ -54,7 +60,7 @@ const HomeStack = () => {
         name="ProductDetail"
         component={ProductDetail}
         options={{
-          header: () => <Header title="Product Detail" parent={true} />,
+          header: () => <Header title="Product Detail" />,
         }}
       />
 
@@ -63,7 +69,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="CategoryDetail"
         options={{
-          header: () => <Header title="Electronics" />,
+          header: () => <Header title={category} />,
         }}
       >
         {() => <CategoryDetail />}

@@ -38,16 +38,47 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
-  const { category, subCategory, products, loading, error } = useSelector(
-    (state) => state.search
-  );
+
+  const {
+    searchValue,
+    rangePrice,
+    rating,
+    category,
+    subCategory,
+    products,
+    loading,
+    error,
+  } = useSelector((state) => state.search);
+
+//   const { category, subCategory, products, loading, error } = useSelector(
+//     (state) => state.search
+//   );
+
   const dispatch = useDispatch();
-  const [listProduct, setListProduct] = React.useState(products);
+
+
+  const [seeAll, setSeeAll] = React.useState(false);
+  // const [listProduct, setListProduct] = React.useState(products);
 
   useEffect(() => {
-    dispatch(fetchProducts({ category, subCategory }));
-    setListProduct(products);
-  }, [category, subCategory]);
+    dispatch(
+      fetchProducts({ searchValue, rangePrice, rating, category, subCategory })
+    );
+    //setListProduct(products);
+    setSeeAll(false);
+  }, [category, subCategory, searchValue, rangePrice, rating]);
+
+  const handleSeeAll = () => {
+    if (seeAll) setSeeAll(false);
+    else setSeeAll(true);
+  };
+
+  //const [products, setProducts] = React.useState([]);
+
+//   useEffect(() => {
+//     dispatch(fetchProducts({ category, subCategory }));
+//     setListProduct(products);
+//   }, [category, subCategory]);
 
   // const [products, setProducts] = React.useState([]);
 
@@ -83,7 +114,10 @@ export default function ListProduct({ categoryName }) {
       )}
       {!loading && !error && (
         <FlatList
-          data={listProduct}
+
+          data={seeAll ? products : products.slice(0, 4)}
+//           data={listProduct}
+
           renderItem={({ item }) => <ProductItem data={item} />}
           keyExtractor={(item) => item.id.toString()}
           scrollEnabled={false}
@@ -91,9 +125,11 @@ export default function ListProduct({ categoryName }) {
       )}
       <TouchableOpacity
         className="bg-gray-200 py-3 rounded-md mt-4"
-        onPress={() => alert("See all")}
+        onPress={handleSeeAll}
       >
-        <Text className="text-gray-700 text-center">See all</Text>
+        <Text className="text-gray-700 text-center">
+          {seeAll ? "Show less" : "See all"}
+        </Text>
       </TouchableOpacity>
     </View>
   );

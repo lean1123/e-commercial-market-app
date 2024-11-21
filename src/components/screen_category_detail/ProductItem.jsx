@@ -3,6 +3,7 @@ import React from "react";
 import { FontAwesome, AntDesign } from "react-native-vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { AirbnbRating } from "react-native-ratings";
 
 export default function ProductItem({ data = {} }) {
   const navigate = useNavigation();
@@ -22,11 +23,16 @@ export default function ProductItem({ data = {} }) {
               : data?.name}
           </Text>
           <View className="flex-row gap-2">
-            <FontAwesome name="star" size={18} color="yellow" />
-            <FontAwesome name="star" size={18} color="yellow" />
-            <FontAwesome name="star" size={18} color="yellow" />
-            <FontAwesome name="star" size={18} color="yellow" />
-            <FontAwesome name="star" size={18} color="gray" />
+            {data?.rating == 0 ? (
+              <Text className="text-gray-500">No rating</Text>
+            ) : (
+              <AirbnbRating
+                showRating={false}
+                size={14}
+                defaultRating={data?.rating}
+                isDisabled
+              />
+            )}
           </View>
         </View>
       </View>
