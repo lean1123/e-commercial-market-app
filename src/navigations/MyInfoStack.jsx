@@ -7,6 +7,7 @@ import MyOrderScreen from "../screens/MyOrderScreen";
 import AddProductScreen from "../screens/AddProductScreen";
 import MyReviewScreen from "../screens/MyReviewScreen";
 import MyAccountScreen from "../screens/MyAccountScreen";
+import ChatScreen from "../screens/ChatScreen";
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,15 @@ const MyInfoStack = () => {
         options={{
           header: () => (
             <Header title="My Profile" parent={false} notShowCart={true} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          header: () => (
+            <Header title="Chat bot" parent={false} notShowCart={true} />
           ),
         }}
       />

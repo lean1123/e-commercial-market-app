@@ -14,6 +14,27 @@ import { auth, db } from "../configurations/firebaseConfig";
 import moment from "moment";
 import { useDispatch } from "react-redux";
 import { fetchNumOfUnreadNotifications } from "../hooks/slices/notificationSlice";
+import { chatSession } from "../configurations/AIModel";
+
+const createPrompt = (messages) => {
+  messages = JSON.stringify(messages, null, 2);
+  const prompt = `
+  You are an AI specialized in generating user-friendly and professional notification messages for e-commerce platforms. Based on the provided order data, generate a notification message to inform the user about their order details.
+
+  Order data: 
+  ${messages}
+  
+
+Your task:
+1. Create a concise notification message to inform the user about their order.
+2. Include details such as the order status, total price, payment method, and date of order.
+3. Format the message to be friendly and professional.
+4. Use Vietnamese language.
+5. The currency should be in $.
+`;
+
+  return prompt;
+};
 
 const CheckOutPage = ({ route }) => {
   const navigation = useNavigation();
@@ -24,6 +45,17 @@ const CheckOutPage = ({ route }) => {
   const { selectedItems, totalPrice } = route.params;
 
   const [paymentMethod, setPaymentMethod] = useState("");
+
+  const handleCreateContentNotification = async (orderData) => {
+    try {
+      const result = await chatSession.sendMessage(createPrompt(orderData));
+      return result.response.text();
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      console.log("Content notification created successfully");
+    }
+  };
 
   const handleOrderCreation = async () => {
     try {
@@ -68,9 +100,13 @@ const CheckOutPage = ({ route }) => {
           totalPrice: totalPrice,
         };
 
+        console.log("Order data: ", orderData);
+
         const orderRef = doc(collection(db, "orders"));
 
-        await setDoc(orderRef, orderData);
+        setDoc(orderRef, orderData);
+
+        orderData.orderId = orderRef.id;
 
         // Update product quantities
         // Update product quantities
@@ -103,12 +139,17 @@ const CheckOutPage = ({ route }) => {
           });
         }
 
+        // Create notification content
+        const notificationContent = await handleCreateContentNotification(
+          orderData
+        );
+
         // Create notification
         const notificationRef = doc(collection(db, "notifications"));
         await setDoc(notificationRef, {
           userId: user.uid,
-          title: "Order Placed",
-          message: "Your order has been placed successfully",
+          title: "Order Successfully",
+          message: notificationContent,
           read: false,
           createdAt: moment(Date.now()).format("hh:mm:ss DD/MM/YYYY"),
         });

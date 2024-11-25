@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchNumOfUnreadNotifications } from "../hooks/slices/notificationSlice";
 import { auth } from "../configurations/firebaseConfig";
+import ChatScreen from "../screens/ChatScreen";
+import ChatStack from "./ChatStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -80,6 +82,31 @@ function MainTab() {
             <AntDesign name="hearto" size={size} color={color} />
           ),
           //tabBarBadge: "99+",
+        }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={ChatStack}
+        options={{
+          tabBarLabel: ({ color, focused }) => (
+            <Text
+              style={{
+                color: color,
+                fontSize: 12,
+                marginBottom: 3,
+                fontWeight: focused ? "bold" : "normal",
+              }}
+            >
+              Chat
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="chat-processing"
+              size={size}
+              color={color}
+            />
+          ),
         }}
       />
       <Tab.Screen
