@@ -4,14 +4,20 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Icon } from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
 import { useDispatch } from "react-redux";
-import { auth } from "../configurations/firebaseConfig";
+
+// import { auth } from "../configurations/firebaseConfig";
+// import { fetchNumOfItemsInCart } from "../hooks/slices/cartSlice";
+
 import { fetchNumOfItemsInCart } from "../hooks/slices/cartSlice";
+import { auth } from "../configurations/firebaseConfig";
+
 
 const CheckOutStatusScreen = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const user = auth.currentUser;
   const { status } = route.params;
+  const dispatch = useDispatch();
 
   return (
     <View className="flex flex-1 items-center justify-center p-5">
@@ -52,7 +58,11 @@ const CheckOutStatusScreen = ({ route }) => {
         className="bg-sky-300 rounded-md w-full flex-row items-center justify-center py-3 mt-4"
         onPress={() => {
           navigation.navigate("HomeScreen");
+
           dispatch(fetchNumOfItemsInCart({ userId: user?.uid }));
+
+//           dispatch(fetchNumOfItemsInCart({ userId: auth.currentUser.uid }));
+
         }}
       >
         <Icon source={"home"} color="white" className="mr-2" size={30} />

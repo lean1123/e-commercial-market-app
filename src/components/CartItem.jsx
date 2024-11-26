@@ -21,10 +21,7 @@ const CartItem = ({ item, onCheckboxChange, handleQuantityChange }) => {
           onPress={handleCheckboxPress}
         />
         <View className="flex-1 flex-row justify-center items-center ml-2">
-          <Image
-            source={require("../../assets/iphone.webp")}
-            className="w-20 h-20 mr-6"
-          />
+          <Image source={{ uri: item.image[0] }} className="w-20 h-20 mr-6" />
           <View className="flex flex-col">
             <Text className="text-base font-semibold">{item.name}</Text>
             <Text className="text-sm font-medium">Price: ${item.price}</Text>
