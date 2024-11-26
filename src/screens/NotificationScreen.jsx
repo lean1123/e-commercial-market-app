@@ -59,7 +59,7 @@ const NotificationScreen = () => {
           notificationsRef,
           where("userId", "==", user.uid),
           orderBy("read", "asc"),
-          orderBy("createdAt", "asc")
+          orderBy("createdAt", "desc")
         ); // Tạo query theo userId
 
         const querySnapshot = await getDocs(q); // Lấy dữ liệu từ Firestore
@@ -68,7 +68,7 @@ const NotificationScreen = () => {
           ...doc.data(), // Lấy dữ liệu của document
         }));
 
-        console.log("Fetched Notifications:", notificationsData);
+        // console.log("Fetched Notifications:", notificationsData);
         setNotifications(notificationsData); // Lưu vào state
       } else {
         console.log("User is not logged in.");
@@ -108,7 +108,11 @@ const NotificationScreen = () => {
           >
             <View>
               <Text className="font-bold text-lg">{item.title}</Text>
-              <Text className="text-gray-400">{item.message}</Text>
+              <Text className="text-gray-400">
+                {item?.message.length > 25
+                  ? `${item?.message.substring(0, 25)}...`
+                  : item?.message}
+              </Text>
             </View>
             <View className={`${!item.read} && "bg-red-50 p-2 rounded-xl"`}>
               <Text
