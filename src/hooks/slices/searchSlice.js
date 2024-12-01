@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { db } from "../../configurations/firebaseConfig";
+
 import {
   collection,
   endAt,
@@ -9,13 +9,14 @@ import {
   startAt,
   where,
 } from "firebase/firestore";
+import { db } from "../../configurations/firebaseConfig";
 
 const initialState = {
   searchValue: "",
   rangePrice: [0, 1000000],
   rating: 0,
-  category: "Electronics",
-  subCategory: "Mobile",
+  category: "",
+  subCategory: "",
   products: [],
   loading: false,
   error: null,
@@ -23,27 +24,34 @@ const initialState = {
 
 export const fetchProducts = createAsyncThunk(
   "search/fetchProducts",
-  async (filter) => {
-    const q = query(
-      collection(db, "products"),
-      orderBy("name"),
-      startAt(filter.searchValue),
-      endAt(filter.searchValue + "\uf8ff"),
-      where("price", ">=", filter.rangePrice[0]),
-      where("price", "<=", filter.rangePrice[1]),
-      where("rating", ">=", filter.rating),
-      where("category", "==", filter.category),
-      where("subCategory", "==", filter.subCategory)
-    );
+  async ({ searchValue, category, subCategory, rangePrice, rating }) => {
+    try {
+      const q = query(
+        collection(db, "products"),
+        orderBy("name"),
+        startAt(searchValue || ""),
+        endAt(searchValue + "\uf8ff"),
+        where("price", ">=", rangePrice[0]),
+        where("price", "<=", rangePrice[1]),
+        where("rating", ">=", rating),
+        where("category", "==", category),
+        where("subCategory", "==", subCategory)
+      );
 
-    const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
-    const data = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
+      const data = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-    return data;
+      console.log("Data: ", data);
+
+      return data;
+    } catch (error) {
+      console.error("Error fetching products: ", error);
+      throw error;
+    }
   }
 );
 
