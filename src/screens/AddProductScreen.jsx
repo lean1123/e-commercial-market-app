@@ -15,7 +15,7 @@ import { TouchableOpacity } from "react-native";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
-import { app } from "../configurations/firebaseConfig";
+import { app, db } from "../configurations/firebaseConfig";
 
 const subCategories = [
   {
@@ -56,6 +56,8 @@ export default function AddProductScreen() {
   const [loading, setLoading] = useState(false);
   const [selectedColor, setSelectedColor] = useState([]);
   const [selectedSize, setSelectedSize] = useState([]);
+  const [price, setPrice] = useState(0);
+  const [quantityInStock, setQuantityInStock] = useState(0);
 
   const [isShowSizeAndColor, setIsShowSizeAndColor] = useState(false);
   const [subCategory, setSubCategory] = useState([]);
@@ -166,6 +168,8 @@ export default function AddProductScreen() {
         color: selectedColor,
         size: selectedSize,
         image: uploadedImageUrls, // Use the uploaded image URLs
+        price: price,
+        quantityInStock: quantityInStock,
       });
 
       if (docRef) {
@@ -189,7 +193,7 @@ export default function AddProductScreen() {
       <Formik
         initialValues={{
           name: "",
-          price: "",
+          price: 0,
           description: "",
           category: "",
           image: [],
@@ -249,10 +253,14 @@ export default function AddProductScreen() {
             ></TextInput>
             <TextInput
               style={styles.input}
+              inputMode="numeric"
               placeholder="Price"
               value={values?.price}
               keyboardType="number-pad"
-              onChangeText={handleChange("price")}
+              onChangeText={(text) => {
+                setFieldValue("price", Number(text));
+                setPrice(Number(text));
+              }}
             ></TextInput>
             <TextInput
               style={styles.input}
@@ -357,9 +365,15 @@ export default function AddProductScreen() {
             <TextInput
               style={styles.input}
               placeholder="Quantity in stock"
+              inputMode="numeric"
               value={values?.quantityInStock}
               keyboardType="number-pad"
-              onChangeText={handleChange("quantityInStock")}
+              onChangeText={
+                (text) => {
+                  setFieldValue("quantityInStock", Number(text));
+                  setQuantityInStock(Number(text));
+                } // Chuyển đổi sang số
+              }
             ></TextInput>
 
             {/* image */}

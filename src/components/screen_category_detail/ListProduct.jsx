@@ -38,7 +38,6 @@ const product = [
 ];
 
 export default function ListProduct({ categoryName }) {
-
   const {
     searchValue,
     rangePrice,
@@ -50,12 +49,11 @@ export default function ListProduct({ categoryName }) {
     error,
   } = useSelector((state) => state.search);
 
-//   const { category, subCategory, products, loading, error } = useSelector(
-//     (state) => state.search
-//   );
+  //   const { category, subCategory, products, loading, error } = useSelector(
+  //     (state) => state.search
+  //   );
 
   const dispatch = useDispatch();
-
 
   const [seeAll, setSeeAll] = React.useState(false);
   // const [listProduct, setListProduct] = React.useState(products);
@@ -65,6 +63,7 @@ export default function ListProduct({ categoryName }) {
       fetchProducts({ searchValue, rangePrice, rating, category, subCategory })
     );
     //setListProduct(products);
+    console.log(searchValue, rangePrice, rating, category, subCategory);
     setSeeAll(false);
   }, [category, subCategory, searchValue, rangePrice, rating]);
 
@@ -75,10 +74,10 @@ export default function ListProduct({ categoryName }) {
 
   //const [products, setProducts] = React.useState([]);
 
-//   useEffect(() => {
-//     dispatch(fetchProducts({ category, subCategory }));
-//     setListProduct(products);
-//   }, [category, subCategory]);
+  //   useEffect(() => {
+  //     dispatch(fetchProducts({ category, subCategory }));
+  //     setListProduct(products);
+  //   }, [category, subCategory]);
 
   // const [products, setProducts] = React.useState([]);
 
@@ -114,9 +113,8 @@ export default function ListProduct({ categoryName }) {
       )}
       {!loading && !error && (
         <FlatList
-
           data={seeAll ? products : products.slice(0, 4)}
-//           data={listProduct}
+          //           data={listProduct}
 
           renderItem={({ item }) => <ProductItem data={item} />}
           keyExtractor={(item) => item.id.toString()}

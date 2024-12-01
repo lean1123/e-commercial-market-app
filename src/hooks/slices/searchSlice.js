@@ -38,6 +38,8 @@ export const fetchProducts = createAsyncThunk(
 
     const querySnapshot = await getDocs(q);
 
+    console.log();
+
     const data = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
