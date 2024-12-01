@@ -63,6 +63,7 @@ export default function ListProduct({ categoryName }) {
       fetchProducts({ searchValue, rangePrice, rating, category, subCategory })
     );
     //setListProduct(products);
+    console.log(searchValue, rangePrice, rating, category, subCategory);
     setSeeAll(false);
   }, [category, subCategory, searchValue, rangePrice, rating, dispatch]);
 

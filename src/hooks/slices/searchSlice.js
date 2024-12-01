@@ -38,7 +38,7 @@ export const fetchProducts = createAsyncThunk(
         where("subCategory", "==", subCategory)
       );
 
-      const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(q);
 
       const data = querySnapshot.docs.map((doc) => ({
         id: doc.id,
