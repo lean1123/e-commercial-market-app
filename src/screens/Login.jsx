@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   Text,
   TextInput,
@@ -21,12 +22,14 @@ export default function Login() {
       const response = await signInWithEmailAndPassword(auth, email, password);
       if (!response.user) {
         console.error("Login failed");
+        Alert.alert("Your email or password is invalid!");
         return;
       }
 
       console.log(response.user.displayName);
     } catch (error) {
       console.log(error);
+      Alert.alert("Your email or password is invalid!");
     }
     setLoading(false);
   };

@@ -3,7 +3,12 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { Checkbox } from "react-native-paper";
 import Feather from "react-native-vector-icons/Feather";
 
-const CartItem = ({ item, onCheckboxChange, handleQuantityChange }) => {
+const CartItem = ({
+  item,
+  onCheckboxChange,
+  handleQuantityChange,
+  handleRemoveItem,
+}) => {
   console.log("item", item);
 
   const [checked, setChecked] = useState(false);
@@ -44,6 +49,12 @@ const CartItem = ({ item, onCheckboxChange, handleQuantityChange }) => {
             <Text className="text-base font-medium">
               Total: ${item.price * item.quantity}
             </Text>
+            <TouchableOpacity
+              className="mt-2 bg-red-500 rounded-md py-1 px-2"
+              onPress={() => handleRemoveItem(item)}
+            >
+              <Text className="text-white">Remove</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </TouchableOpacity>

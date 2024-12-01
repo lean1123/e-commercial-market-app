@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Alert, ToastAndroid } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import SliderBanner from "../components/screen_category_detail/SliderBanner";
 import { Feather } from "@expo/vector-icons";

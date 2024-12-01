@@ -65,7 +65,7 @@ export default function ListProduct({ categoryName }) {
     //setListProduct(products);
     console.log(searchValue, rangePrice, rating, category, subCategory);
     setSeeAll(false);
-  }, [category, subCategory, searchValue, rangePrice, rating]);
+  }, [category, subCategory, searchValue, rangePrice, rating, dispatch]);
 
   const handleSeeAll = () => {
     if (seeAll) setSeeAll(false);

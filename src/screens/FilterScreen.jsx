@@ -2,28 +2,34 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import { AirbnbRating } from "react-native-ratings";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FilterSubtitleItem from "../components/FilterSubtitleItem";
 import { setRangePrice, setRating } from "../hooks/slices/searchSlice";
 
 const FilterScreen = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [value, setValue] = useState({ values: [0, 5000] });
-  const [rate, setRate] = useState(0);
+  const { rangePrice, rating } = useSelector((state) => state.search);
+
+  const [value, setValue] = useState({
+    values: [rangePrice[0], rangePrice[1]],
+  });
+  const [rate, setRate] = useState(rating);
   const multiSliderValuesChange = (values) => {
     setValue({
       values,
     });
+    dispatch(setRangePrice([values[0], values[1]]));
     console.log(values);
   };
 
   const handleRating = (value) => {
     setRate(value);
+    dispatch(setRating(value));
     console.log(value);
   };
 
@@ -120,6 +126,16 @@ const FilterScreen = () => {
             handleRating(rating);
           }}
         />
+
+        <TouchableOpacity
+          className="items-center py-2 px-1 bg-blue-400 rounded-lg ml-2"
+          onPress={() => {
+            dispatch(setRating(0));
+            setRate(0);
+          }}
+        >
+          <Text className="text-white text-sm font-medium">Reset rating</Text>
+        </TouchableOpacity>
         {/* <Text className="ml-2">& Up</Text> */}
       </View>
 
