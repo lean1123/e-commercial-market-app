@@ -14,7 +14,7 @@ export default function Header({ title, parent, notShowCart }) {
   const { numOfItemsInCart } = useSelector((state) => state.cart);
   useEffect(() => {
     dispatch(fetchNumOfItemsInCart({ userId: user?.uid }));
-  }, []);
+  }, [dispatch, user]);
   return (
     <View className="flex-row h-[90px] bg-white justify-between items-center border-b-[1px] border-gray-100 pt-8 px-5 pb-2">
       <View className="flex-row items-center gap-2">

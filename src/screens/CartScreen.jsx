@@ -11,6 +11,9 @@ import {
 import { Icon } from "react-native-paper";
 import CartItem from "../components/CartItem";
 import { auth, db } from "../configurations/firebaseConfig";
+import { Alert } from "react-native";
+import { useDispatch } from "react-redux";
+import { fetchNumOfItemsInCart } from "../hooks/slices/cartSlice";
 
 const CartScreen = () => {
   const [selectedItems, setSelectedItems] = useState([]);
@@ -18,6 +21,8 @@ const CartScreen = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   // const [totalPrice, setTotalPrice] = useState(0);
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
 
   const cartMap = useMemo(() => {
     return new Map(cartDetails.map((item) => [item.productId, item]));
@@ -57,6 +62,7 @@ const CartScreen = () => {
             );
 
             setCartDetails(productsWithDetails);
+            dispatch(fetchNumOfItemsInCart({ userId: user.uid }));
           }
         }
       } catch (error) {
@@ -105,20 +111,22 @@ const CartScreen = () => {
           }
 
           setIsUpdated(true);
+          dispatch(fetchNumOfItemsInCart({ userId: user.uid }));
 
-          console.log("Cart updated");
+          Alert.alert("Cart updated");
         }
       } else {
-        console.log("No user is logged in");
+        Alert.alert("No user is logged in");
       }
     } catch (error) {
-      console.error("Error updating cart:", error);
+      Alert.alert("Error updating cart:", error);
     }
   };
 
   const handleQuantityChange = (item, change) => {
     const newQuantity = item.quantity + change;
-    if (newQuantity > 0) {
+
+    if (newQuantity >= 0) {
       updateCartQuantity(item, newQuantity);
     }
   };
@@ -130,6 +138,42 @@ const CartScreen = () => {
         return [...prevItems, item];
       }
     });
+  };
+
+  const handleRemoveItem = async (item) => {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const cartRef = doc(db, "carts", user.uid);
+
+        // Fetch the current cart details
+        const cartSnap = await getDoc(cartRef);
+        if (cartSnap.exists()) {
+          const cartData = cartSnap.data();
+          const updatedCartDetails = cartData.cartDetails.filter(
+            (cartItem) => cartItem.productId !== item.productId
+          );
+
+          // Update the cart with the new item
+          await updateDoc(cartRef, {
+            cartDetails: updatedCartDetails,
+          });
+
+          // Update the local state
+          setCartDetails(updatedCartDetails);
+          setSelectedItems((prevSelectedItems) =>
+            prevSelectedItems.filter((i) => i.productId !== item.productId)
+          );
+          dispatch(fetchNumOfItemsInCart({ userId: user.uid }));
+
+          Alert.alert("Cart item removed");
+        }
+      } else {
+        Alert.alert("No user is logged in");
+      }
+    } catch (error) {
+      Alert.alert("Error removing cart item:", error);
+    }
   };
 
   return (
@@ -144,6 +188,7 @@ const CartScreen = () => {
             item={item}
             onCheckboxChange={handleCheckboxChange}
             handleQuantityChange={handleQuantityChange}
+            handleRemoveItem={handleRemoveItem}
           />
         )}
         keyExtractor={(item) => item.productId?.toString()}
@@ -159,6 +204,25 @@ const CartScreen = () => {
       <TouchableOpacity
         className="bg-sky-300 rounded-md w-full flex flex-row items-center justify-center py-3 mt-4"
         onPress={() => {
+          if (selectedItems.length === 0) {
+            Alert.alert("No items selected");
+            return;
+          }
+
+          let isPass = true;
+
+          selectedItems.map((item) => {
+            if (item.quantity === 0) {
+              isPass = false;
+              return;
+            }
+          });
+
+          if (!isPass) {
+            Alert.alert("Quantity must be greater than 0");
+            return;
+          }
+
           navigation.navigate("CheckOutPage", { selectedItems, totalPrice });
         }}
       >

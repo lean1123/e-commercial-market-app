@@ -11,10 +11,8 @@ import { useDispatch } from "react-redux";
 import { fetchNumOfItemsInCart } from "../hooks/slices/cartSlice";
 import { auth } from "../configurations/firebaseConfig";
 
-
 const CheckOutStatusScreen = ({ route }) => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const user = auth.currentUser;
   const { status } = route.params;
   const dispatch = useDispatch();
@@ -61,8 +59,7 @@ const CheckOutStatusScreen = ({ route }) => {
 
           dispatch(fetchNumOfItemsInCart({ userId: user?.uid }));
 
-//           dispatch(fetchNumOfItemsInCart({ userId: auth.currentUser.uid }));
-
+          //           dispatch(fetchNumOfItemsInCart({ userId: auth.currentUser.uid }));
         }}
       >
         <Icon source={"home"} color="white" className="mr-2" size={30} />
